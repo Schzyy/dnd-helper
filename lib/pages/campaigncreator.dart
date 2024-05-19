@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:dmhelper/models/mockup.dart';
+import 'package:dmhelper/models/campaign.dart';
+import 'dart:developer';
 
 class Campaigncreator extends StatefulWidget {
   const Campaigncreator({super.key});
@@ -12,27 +15,14 @@ class _CampaigncreatorState extends State<Campaigncreator> {
   final TextEditingController _controller = TextEditingController();
   void _saveText() {
     String text = _controller.text;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Saved Text'),
-          content: Text(text),
-          actions: <Widget> [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              }, 
-              child: Text("OK"),
-            )
-          ]
-        );
-      }
-    );
+    addCampaing(text);
+    Navigator.pop(context);
   }
 
+  void addCampaing(String name) {
+    name = _controller.text;
+    campaigns.add(Campaign(name:name, characters: []));
+  }
   void disposeTextEditingController() {
     _controller.dispose();
     super.dispose();

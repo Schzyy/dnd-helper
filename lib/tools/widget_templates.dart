@@ -4,7 +4,7 @@ import 'package:dmhelper/pages/campaigncreator.dart';
 //Das ist Die Appbar auf der ersten Seite
 class OverHeadMyCampaigns extends StatelessWidget {
   const OverHeadMyCampaigns({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +33,10 @@ class OverHeadMyCampaigns extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Campaigncreator())
+                    MaterialPageRoute(builder: (context)  {
+                        return Campaigncreator();
+                      }
+                    )
                   );
                 }
               )
@@ -44,10 +47,42 @@ class OverHeadMyCampaigns extends StatelessWidget {
   }
 }
 
+class addCampaingResultBtn extends StatefulWidget {
+  const addCampaingResultBtn({super.key});
+
+  @override
+  State<addCampaingResultBtn> createState() => _addCampaingResultBtnState();
+}
+
+class _addCampaingResultBtnState extends State<addCampaingResultBtn> {
+
+  void getResult() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Campaigncreator()),
+    );
+
+    // Update state in ScreenA if result is not null
+    if (result != null) {
+      setState(() {
+      });
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+                child: const Icon(Icons.add),
+                onTap: () {
+                  getResult();
+                }
+              );
+  }
+}
+
 //Die Campaignkarte welche auf der MyCampaignseite angezeigt wird
 class CampaignOverviewCard extends StatelessWidget {
   final String title;
-  final List<String> characters;
+  final int characters;
   const CampaignOverviewCard({super.key, required this.title, required this.characters});
 
   @override
@@ -61,26 +96,25 @@ class CampaignOverviewCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Bold Text',
-                    style: TextStyle(
+                    title,
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     )
                   ),
-                  Text("hello")
                 ],
               ),
               Container(
                 color: Colors.amber,
                 height: 5
               ),
-              const Text(
-                'smaller Text',
-                style: TextStyle(
+              Text(
+                'Heroes: $characters',
+                style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 )
