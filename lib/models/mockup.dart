@@ -1,5 +1,8 @@
 import 'campaign.dart';
 
+//Beispielwerte zum testen solange die Datenbank nicht sitzt
+
+//Mockup für Campainglist
 List<Campaign> campaigns = [
   Campaign(
     name: 'Azeroth',
@@ -7,6 +10,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Hugo",
         level: 13,
+        rasse: "Altersheim",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -33,6 +37,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Lakschuh",
         level: 13,
+        rasse: "Gamer",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -59,6 +64,7 @@ List<Campaign> campaigns = [
     Character(
         name: "Bando",
         level: 13,
+        rasse: "Balkan",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -90,6 +96,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Hugo",
         level: 13,
+        rasse: "unknown",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -116,6 +123,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Lakschuh",
         level: 13,
+        rasse: "Mensch",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -140,5 +148,35 @@ List<Campaign> campaigns = [
         )
       ),  
     ]
+  )
+];
+
+List<Character> chars = [
+  Character(
+    name: "Gomme",
+    level: 10, 
+    rasse: "Gnom",
+    characterclass: "Mage", 
+    initModifier: 6, 
+    armorClass: 12, 
+    hp: Hp(
+      currentHp: 60,
+      maxHp: 60,
+      tempHp: 0
+    ), 
+    stats: Stats(
+      str: 9,
+      strProfieciency: false,
+      dex: 12,
+      dexProfieciency: false,
+      con: 10,
+      conProfieciency: false,
+      inte: 18,
+      intProfieciency: false,
+      wis: 14,
+      wisProfieciency: false,
+      cha: 10,
+      chaProfieciency: false,
+    )
   )
 ];

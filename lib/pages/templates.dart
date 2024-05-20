@@ -1,9 +1,33 @@
+import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter/material.dart';
-import 'package:dmhelper/pages/campaigncreator.dart';
+import 'package:dmhelper/models/mockup.dart';
 
-//Das ist Die Appbar auf der ersten Seite
-class OverHeadMyCampaigns extends StatelessWidget {
-  const OverHeadMyCampaigns({super.key});
+class TemplatePage extends StatelessWidget {
+  const TemplatePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Column(
+        children: [
+          TopbarTemplates(),
+          Expanded(
+            child: TemplatesDisplay(),
+          ),
+          NavBarTemplates(templates: true)
+        ],
+      ),
+    );
+  }
+}
+
+class TopbarTemplates extends StatefulWidget {
+  const TopbarTemplates({super.key});
+
+  @override
+  State<TopbarTemplates> createState() => _TopbarTemplatesState();
+}
+class _TopbarTemplatesState extends State<TopbarTemplates> {
   
   @override
   Widget build(BuildContext context) {
@@ -15,7 +39,7 @@ class OverHeadMyCampaigns extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.fromLTRB(10,30,10,0),
             child: Text(
-              "My Campaigns",
+              "My Characters",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold
@@ -33,10 +57,7 @@ class OverHeadMyCampaigns extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context)  {
-                        return Campaigncreator();
-                      }
-                    )
+                    MaterialPageRoute(builder: (context) => const CharactercreatorPage())
                   );
                 }
               )
@@ -47,48 +68,16 @@ class OverHeadMyCampaigns extends StatelessWidget {
   }
 }
 
-class addCampaingResultBtn extends StatefulWidget {
-  const addCampaingResultBtn({super.key});
-
-  @override
-  State<addCampaingResultBtn> createState() => _addCampaingResultBtnState();
-}
-
-class _addCampaingResultBtnState extends State<addCampaingResultBtn> {
-
-  void getResult() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Campaigncreator()),
-    );
-
-    // Update state in ScreenA if result is not null
-    if (result != null) {
-      setState(() {
-      });
-    }
-  }
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-                child: const Icon(Icons.add),
-                onTap: () {
-                  getResult();
-                }
-              );
-  }
-}
-
-//Die Campaignkarte welche auf der MyCampaignseite angezeigt wird
-class CampaignOverviewCard extends StatelessWidget {
-  final String title;
-  final int characters;
-  const CampaignOverviewCard({super.key, required this.title, required this.characters});
+class TemplateCard extends StatelessWidget {
+  final String name;
+  final String rasse;
+  final String characterclass;
+  const TemplateCard({super.key, required this.name, required this.rasse, required this.characterclass});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 150,
+      height: 180,
       child: Card(
         margin: const EdgeInsets.all(10),
         child: Padding(
@@ -100,7 +89,7 @@ class CampaignOverviewCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    title,
+                    name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -113,7 +102,14 @@ class CampaignOverviewCard extends StatelessWidget {
                 height: 5
               ),
               Text(
-                'Heroes: $characters',
+                'Race: $rasse',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                )
+              ),
+              Text(
+                'class: $characterclass',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -136,16 +132,37 @@ class CampaignOverviewCard extends StatelessWidget {
   }
 }
 
-class NavBarMyCampaignsTemplate extends StatefulWidget {
-  final bool templates;
-
-  const NavBarMyCampaignsTemplate({super.key, required this.templates});
+class TemplatesDisplay extends StatefulWidget {
+  const TemplatesDisplay({super.key});
 
   @override
-  State<NavBarMyCampaignsTemplate> createState() => _NavBarMyCampaignsTemplateState();
+  State<TemplatesDisplay> createState() => _TemplatesDisplayState();
 }
 
-class _NavBarMyCampaignsTemplateState extends State<NavBarMyCampaignsTemplate> {
+class _TemplatesDisplayState extends State<TemplatesDisplay> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    primary: false,
+                    itemCount: chars.length,
+                    itemBuilder: (context, index) {
+                      return TemplateCard(name: chars[index].name, rasse: chars[index].rasse, characterclass: chars[index].characterclass);
+                    }
+    );
+  }
+}
+
+class NavBarTemplates extends StatefulWidget {
+  final bool templates;
+
+  const NavBarTemplates({super.key, required this.templates});
+
+  @override
+  State<NavBarTemplates> createState() => _NavBarMyTemplateState();
+}
+
+class _NavBarMyTemplateState extends State<NavBarTemplates> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -159,9 +176,6 @@ class _NavBarMyCampaignsTemplateState extends State<NavBarMyCampaignsTemplate> {
                 child: Text("TEMPLATES", style: TextStyle(color: Colors.white)),
               ),
               onTap: () {
-                setState(() {
-                  // Update state if needed
-                });
               },
             ),
           ),
@@ -175,9 +189,7 @@ class _NavBarMyCampaignsTemplateState extends State<NavBarMyCampaignsTemplate> {
                 child: Text("MY CAMPAIGNS", style: TextStyle(color: Colors.white)),
               ),
               onTap: () {
-                setState(() {
-                  // Update state if needed
-                });
+                Navigator.pop(context);
               },
             ),
           ),

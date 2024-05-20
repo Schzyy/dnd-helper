@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/campaign.dart';
-import 'dart:developer';
 
 class Campaigncreator extends StatefulWidget {
   const Campaigncreator({super.key});

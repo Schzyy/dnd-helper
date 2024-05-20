@@ -1,3 +1,5 @@
+//Datenmodel für die Campagne und die Characters
+
 class Campaign {
   String name;
   List<Character> characters;
@@ -11,6 +13,7 @@ class Campaign {
 class Character {
   String name;
   int level;
+  String rasse;
   String characterclass;
   int initModifier;
   int armorClass;
@@ -19,6 +22,7 @@ class Character {
 
   Character({
     required this.name,
+    required this.rasse,
     required this.level,
     required this.characterclass,
     required this.initModifier,
