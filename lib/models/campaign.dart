@@ -13,7 +13,7 @@ class Campaign {
 class Character {
   String name;
   int level;
-  String rasse;
+  String race;
   String characterclass;
   int initModifier;
   int armorClass;
@@ -22,7 +22,7 @@ class Character {
 
   Character({
     required this.name,
-    required this.rasse,
+    required this.race,
     required this.level,
     required this.characterclass,
     required this.initModifier,

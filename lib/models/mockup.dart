@@ -10,7 +10,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Hugo",
         level: 13,
-        rasse: "Altersheim",
+        race: "Altersheim",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -37,7 +37,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Lakschuh",
         level: 13,
-        rasse: "Gamer",
+        race: "Gamer",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -64,7 +64,7 @@ List<Campaign> campaigns = [
     Character(
         name: "Bando",
         level: 13,
-        rasse: "Balkan",
+        race: "Balkan",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -96,7 +96,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Hugo",
         level: 13,
-        rasse: "unknown",
+        race: "unknown",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -123,7 +123,7 @@ List<Campaign> campaigns = [
       Character(
         name: "Lakschuh",
         level: 13,
-        rasse: "Mensch",
+        race: "Mensch",
         characterclass: "Barbar",
         initModifier: 4,
         armorClass: 17,
@@ -155,7 +155,7 @@ List<Character> chars = [
   Character(
     name: "Gomme",
     level: 10, 
-    rasse: "Gnom",
+    race: "Gnom",
     characterclass: "Mage", 
     initModifier: 6, 
     armorClass: 12, 

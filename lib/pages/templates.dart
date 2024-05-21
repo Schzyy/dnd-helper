@@ -1,6 +1,7 @@
 import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
+import 'package:dmhelper/pages/characterview.dart';
 
 class TemplatePage extends StatelessWidget {
   const TemplatePage({super.key});
@@ -27,27 +28,35 @@ class TopbarTemplates extends StatefulWidget {
   @override
   State<TopbarTemplates> createState() => _TopbarTemplatesState();
 }
+
 class _TopbarTemplatesState extends State<TopbarTemplates> {
-  
+  void _navigateAndRefresh(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CharactercreatorPage()),
+    );
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(15,10,15,30),
+      margin: const EdgeInsets.fromLTRB(15, 10, 15, 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(10,30,10,0),
+            padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
             child: Text(
               "My Characters",
               style: TextStyle(
                 fontSize: 30,
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,30,30,0),
+            padding: const EdgeInsets.fromLTRB(0, 30, 30, 0),
             child: Container(
               color: Colors.white,
               height: 50,
@@ -55,15 +64,13 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
               child: GestureDetector(
                 child: const Icon(Icons.add),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CharactercreatorPage())
-                  );
-                }
-              )
+                  _navigateAndRefresh(context);
+                },
+              ),
             ),
           )
-        ],)
+        ],
+      ),
     );
   }
 }
@@ -72,7 +79,13 @@ class TemplateCard extends StatelessWidget {
   final String name;
   final String rasse;
   final String characterclass;
-  const TemplateCard({super.key, required this.name, required this.rasse, required this.characterclass});
+
+  const TemplateCard({
+    super.key,
+    required this.name,
+    required this.rasse,
+    required this.characterclass,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -93,27 +106,27 @@ class TemplateCard extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                    )
+                    ),
                   ),
                 ],
               ),
               Container(
                 color: Colors.amber,
-                height: 5
+                height: 5,
               ),
               Text(
                 'Race: $rasse',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
-                )
+                ),
               ),
               Text(
-                'class: $characterclass',
+                'Class: $characterclass',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
-                )
+                ),
               ),
               const SizedBox(height: 10),
               const Row(
@@ -123,10 +136,10 @@ class TemplateCard extends StatelessWidget {
                   SizedBox(height: 5),
                 ],
               ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
-          )
-        )
+          ),
+        ),
       ),
     );
   }
@@ -143,12 +156,22 @@ class _TemplatesDisplayState extends State<TemplatesDisplay> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    primary: false,
-                    itemCount: chars.length,
-                    itemBuilder: (context, index) {
-                      return TemplateCard(name: chars[index].name, rasse: chars[index].rasse, characterclass: chars[index].characterclass);
-                    }
+      scrollDirection: Axis.vertical,
+      primary: false,
+      itemCount: chars.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CharacterPage(char: chars[index]))
+          ),
+          child: TemplateCard(
+            name: chars[index].name,
+            rasse: chars[index].race,
+            characterclass: chars[index].characterclass,
+          ),
+        );
+      },
     );
   }
 }
@@ -175,8 +198,7 @@ class _NavBarMyTemplateState extends State<NavBarTemplates> {
               child: const Center(
                 child: Text("TEMPLATES", style: TextStyle(color: Colors.white)),
               ),
-              onTap: () {
-              },
+              onTap: () {},
             ),
           ),
         ),
