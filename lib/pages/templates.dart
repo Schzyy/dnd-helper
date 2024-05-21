@@ -33,7 +33,7 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
   void _navigateAndRefresh(BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CharactercreatorPage()),
+      MaterialPageRoute(builder: (context) => const CharactercreatorPage(template: true, index: 0)),
     );
     setState(() {});
   }

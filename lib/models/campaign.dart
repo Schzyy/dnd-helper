@@ -34,13 +34,13 @@ class Character {
 
 class Hp {
   int maxHp;
-  int currentHp;
-  int tempHp;
+  int? currentHp;
+  int? tempHp;
 
   Hp({
     required this.maxHp,
-    required this.currentHp,
-    required this.tempHp,
+    this.currentHp,
+    this.tempHp,
   });
 }
 
@@ -73,3 +73,19 @@ class Stats {
     required this.chaProfieciency,
   });
 }
+
+final List<String> desc = [
+    'Name',
+    'Level',
+    'Race',
+    'Class',
+    'Initiative',
+    'Armorclass',
+    'HP',
+    'Strength',
+    'Dexterity',
+    'Consitution',
+    'Inteligence',
+    'Wisdom',
+    'Charisma'
+    ];

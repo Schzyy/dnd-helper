@@ -7,7 +7,13 @@ class CharacterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CharacterViewPage(viewChar: char);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(char.name),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body: CharacterViewPage(viewChar: char),
+    );
   }
 }
 
@@ -20,21 +26,7 @@ class CharacterViewPage extends StatefulWidget {
 }
 
 class _CharacterViewPageState extends State<CharacterViewPage> {
-  final List<String> desc = [
-    'Name',
-    'Level',
-    'Race',
-    'Class',
-    'Initiative',
-    'Armorclass',
-    'HP',
-    'Strength',
-    'Dexterity',
-    'Consitution',
-    'Inteligence',
-    'Wisdom',
-    'Charisma'
-    ];
+  
   late final List<dynamic> characterAttributes = [
     widget.viewChar.name,
     widget.viewChar.level,
@@ -49,17 +41,47 @@ class _CharacterViewPageState extends State<CharacterViewPage> {
     widget.viewChar.stats.inte,
     widget.viewChar.stats.wis,
     widget.viewChar.stats.cha
+  ];
 
+  late final List<String> attributeNames = [
+    'Name',
+    'Level',
+    'Race',
+    'Class',
+    'Initiative Modifier',
+    'Armor Class',
+    'Max HP',
+    'Strength',
+    'Dexterity',
+    'Constitution',
+    'Intelligence',
+    'Wisdom',
+    'Charisma'
   ];
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 13,
+      padding: const EdgeInsets.all(10),
+      itemCount: characterAttributes.length,
       itemBuilder: (context, index) {
-        return Text('${desc[index]}: ${characterAttributes[index]}');
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          child: ListTile(
+            leading: CircleAvatar(
+              child: Text(attributeNames[index][0]),
+              backgroundColor: Colors.blueAccent,
+            ),
+            title: Text(
+              attributeNames[index],
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(characterAttributes[index].toString()),
+          ),
+        );
       },
     );
   }
 }
-

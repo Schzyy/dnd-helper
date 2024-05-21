@@ -2,26 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/mockup.dart';
 
-void main() {
-  runApp(const CampaignStart());
-}
-
-class CampaignStart extends StatelessWidget {
-  const CampaignStart({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const CharactercreatorPage(),
-    );
-  }
-}
-
 class CharactercreatorPage extends StatelessWidget {
-  const CharactercreatorPage({super.key});
+  final bool template;
+  final int index;
+  const CharactercreatorPage({super.key, required this.template, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +23,7 @@ class CharactercreatorPage extends StatelessWidget {
               ),
             ),
           ),
-          const Expanded(child: CharacterCreator())
+          Expanded(child: CharacterCreator(template: template, index: index))
         ],
       ),
     );
@@ -47,7 +31,10 @@ class CharactercreatorPage extends StatelessWidget {
 }
 
 class CharacterCreator extends StatefulWidget {
-  const CharacterCreator({super.key});
+  final bool template;
+  final int index;
+
+  const CharacterCreator({super.key, required this.template, required this.index});
 
   @override
   State<CharacterCreator> createState() => _CharacterCreatorState();
@@ -97,8 +84,13 @@ class _CharacterCreatorState extends State<CharacterCreator> {
           chaProfieciency: false,
         ),
       );
-      chars.add(newCharacter);
-    });
+      if(widget.template == true) {
+        chars.add(newCharacter);  
+      } 
+      else if(widget.template == false) {
+        campaigns[widget.index].characters.add(newCharacter);
+      }
+  });
     Navigator.pop(context);
   }
 
