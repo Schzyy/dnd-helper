@@ -1,5 +1,4 @@
 //Datenmodel für die Campagne und die Characters
-
 class Campaign {
   String name;
   List<Character> characters;
@@ -11,6 +10,7 @@ class Campaign {
 }
 
 class Character {
+  bool good;
   String name;
   int level;
   String race;
@@ -21,6 +21,7 @@ class Character {
   Stats stats;
 
   Character({
+    required this.good,
     required this.name,
     required this.race,
     required this.level,
@@ -74,6 +75,17 @@ class Stats {
   });
 }
 
+class Combat {
+  List<bool> partake = [
+
+  ];
+  List<Character> heroes = [
+  ];
+  List<Character> opponentes = [
+  ];
+}
+
+//Help für die CharacterViewSeite
 final List<String> desc = [
     'Name',
     'Level',
@@ -88,4 +100,4 @@ final List<String> desc = [
     'Inteligence',
     'Wisdom',
     'Charisma'
-    ];
+];

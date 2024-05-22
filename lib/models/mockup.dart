@@ -8,6 +8,7 @@ List<Campaign> campaigns = [
     name: 'Azeroth',
     characters: [
       Character(
+        good: true,
         name: "Hugo",
         level: 13,
         race: "Altersheim",
@@ -35,6 +36,7 @@ List<Campaign> campaigns = [
         )
       ),
       Character(
+        good: true,
         name: "Lakschuh",
         level: 13,
         race: "Gamer",
@@ -62,6 +64,7 @@ List<Campaign> campaigns = [
         )
       ),  
     Character(
+        good: true,
         name: "Bando",
         level: 13,
         race: "Balkan",
@@ -94,6 +97,7 @@ List<Campaign> campaigns = [
     name: 'Blackrockspire',
     characters: [
       Character(
+        good: true,
         name: "Hugo",
         level: 13,
         race: "unknown",
@@ -121,6 +125,7 @@ List<Campaign> campaigns = [
         )
       ),
       Character(
+        good: true,
         name: "Lakschuh",
         level: 13,
         race: "Mensch",
@@ -151,8 +156,12 @@ List<Campaign> campaigns = [
   )
 ];
 
+Combat combat = Combat();
+
+//Templateliste Momentan nur gegner
 List<Character> chars = [
   Character(
+    good: false,
     name: "Gomme",
     level: 10, 
     race: "Gnom",

@@ -58,6 +58,7 @@ class _CharacterCreatorState extends State<CharacterCreator> {
   void _submitCharacter() {
     setState(() {
       final newCharacter = Character(
+        good: true,
         name: _nameController.text,
         level: int.tryParse(_levelController.text) ?? 1,
         race: _raceController.text,

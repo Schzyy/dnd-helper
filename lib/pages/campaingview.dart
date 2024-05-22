@@ -1,6 +1,7 @@
+import 'package:dmhelper/pages/characterview.dart';
+import 'package:dmhelper/pages/comabtprepteam.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
-import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/mockup.dart';
 
 class CampaingViewPage extends StatelessWidget {
@@ -13,37 +14,63 @@ class CampaingViewPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(campaigns[index].name),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CharactercreatorPage(template: false, index: index),
-                  ),
-                );
-              },
-              child: const Text(
-                "Add a Hero",
-                style: TextStyle(fontSize: 18),
+      body: Stack(children: [
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CharactercreatorPage(template: false, index: index),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Add a Hero",
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Campaingview(index: index),
-          ),
-        ],
-      ),
+            Expanded(
+              child: Campaingview(index: index),
+            ),
+          ],
+        ),
+        Positioned(
+            bottom: 100,
+            right: 20,
+            child: SizedBox(
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CombatPrepTeam(indexCampaign: index))
+                  );
+                },
+                child: const Text("Combat"),
+              ),
+            )),
+        Positioned(
+            bottom: 20,
+            right: 20,
+            child: SizedBox(
+              child: FloatingActionButton(
+                onPressed: () {},
+                child: const Text("Notes"),
+              ),
+            ))
+      ]),
     );
   }
 }
@@ -75,45 +102,54 @@ class _CampaingviewState extends State<Campaingview> {
 class CharacterCard extends StatelessWidget {
   final int indexCampaing;
   final int indexCharacter;
-  const CharacterCard({super.key, required this.indexCampaing, required this.indexCharacter});
+  const CharacterCard(
+      {super.key, required this.indexCampaing, required this.indexCharacter});
 
   @override
   Widget build(BuildContext context) {
     final character = campaigns[indexCampaing].characters[indexCharacter];
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                character.name,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CharacterViewPage(viewChar: character))
+          );
+        },
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  character.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    character.characterclass,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
-                    character.race,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      character.characterclass,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      character.race,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
