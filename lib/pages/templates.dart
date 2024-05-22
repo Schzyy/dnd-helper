@@ -56,7 +56,7 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 30, 0),
+            padding: const EdgeInsets.fromLTRB(0, 30, 15, 0),
             child: Container(
               color: Colors.white,
               height: 50,
