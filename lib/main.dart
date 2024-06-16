@@ -3,9 +3,16 @@ import 'package:dmhelper/pages/campaigncreator.dart';
 import 'package:dmhelper/pages/campaingview.dart';
 import 'package:dmhelper/pages/templates.dart';
 import 'package:dmhelper/models/mockup.dart';
+import 'package:dmhelper/models/updater.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const CampaignStart());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => Updater(),
+      child: const CampaignStart(),
+    ),
+  );
 }
 
 class CampaignStart extends StatelessWidget {
@@ -14,7 +21,50 @@ class CampaignStart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: CampaignSelector(),
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int currentPageIndex = 1;
+
+  final List<Widget> pages = [
+    TemplatePage(),
+    const CampaignSelector(),
+  ];
+
+  void onTabTapped(int index) {
+    setState(() {
+      currentPageIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentPageIndex,
+        onTap: onTabTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Templates',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Campaigns',
+          ),
+        ],
+      ),
+      body: pages[currentPageIndex],
     );
   }
 }
@@ -24,17 +74,13 @@ class CampaignSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      body: const Column(
-        children: [
-          TopbarCampaigns(),
-          Expanded(
-            child: CampaignsList(),
-          ),
-          NavBarMyCampaignsTemplate(templates: false),
-        ],
-      ),
+    return const Column(
+      children: [
+        TopbarCampaigns(),
+        Expanded(
+          child: CampaignsList(),
+        ),
+      ],
     );
   }
 }
@@ -53,7 +99,7 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
       MaterialPageRoute(builder: (context) => const Campaigncreator()),
     );
     if (result != null) {
-      setState(() {}); // Refresh the state when returning
+      Provider.of<Updater>(context, listen: false).refresh();
     }
   }
 
@@ -98,7 +144,11 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
 class CampaignOverviewCard extends StatelessWidget {
   final String title;
   final int characters;
-  const CampaignOverviewCard({super.key, required this.title, required this.characters});
+  const CampaignOverviewCard({
+    super.key,
+    required this.title,
+    required this.characters,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -156,25 +206,27 @@ class CampaignsList extends StatefulWidget {
 class _CampaignsListState extends State<CampaignsList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: campaigns.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CampaingViewPage(index: index),
-              ),
-            );
-          },
-          child: CampaignOverviewCard(
-            title: campaigns[index].name,
-            characters: campaigns[index].characters.length,
-          ),
-        );
-      },
-    );
+    return Consumer<Updater>(builder: (context, value, child) {
+      return ListView.builder(
+        itemCount: campaigns.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CampaingViewPage(index: index),
+                ),
+              );
+            },
+            child: CampaignOverviewCard(
+              title: campaigns[index].name,
+              characters: campaigns[index].characters.length,
+            ),
+          );
+        },
+      );
+    });
   }
 }
 
@@ -184,7 +236,8 @@ class NavBarMyCampaignsTemplate extends StatefulWidget {
   const NavBarMyCampaignsTemplate({super.key, required this.templates});
 
   @override
-  State<NavBarMyCampaignsTemplate> createState() => _NavBarMyCampaignsTemplateState();
+  State<NavBarMyCampaignsTemplate> createState() =>
+      _NavBarMyCampaignsTemplateState();
 }
 
 class _NavBarMyCampaignsTemplateState extends State<NavBarMyCampaignsTemplate> {
@@ -197,7 +250,7 @@ class _NavBarMyCampaignsTemplateState extends State<NavBarMyCampaignsTemplate> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const TemplatePage()),
+                MaterialPageRoute(builder: (context) => TemplatePage()),
               );
             },
             child: Container(
@@ -215,7 +268,6 @@ class _NavBarMyCampaignsTemplateState extends State<NavBarMyCampaignsTemplate> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              setState(() {});
             },
             child: Container(
               height: 50,

@@ -32,7 +32,6 @@ class _CharacterViewPageState extends State<CharacterViewPage> {
     widget.viewChar.level,
     widget.viewChar.race,
     widget.viewChar.characterclass,
-    widget.viewChar.initModifier,
     widget.viewChar.armorClass,
     widget.viewChar.hp.maxHp,
     widget.viewChar.stats.str,

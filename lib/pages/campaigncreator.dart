@@ -1,6 +1,8 @@
+import 'package:dmhelper/models/updater.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/campaign.dart';
+import 'package:provider/provider.dart';
 
 class Campaigncreator extends StatefulWidget {
   const Campaigncreator({super.key});
@@ -15,6 +17,7 @@ class _CampaigncreatorState extends State<Campaigncreator> {
   void _saveText() {
     String text = _controller.text;
     addCampaing(text);
+    Provider.of<Updater>(context, listen: false).refresh();
     Navigator.pop(context);
   }
 

@@ -15,7 +15,6 @@ class Character {
   int level;
   String race;
   String characterclass;
-  int initModifier;
   int armorClass;
   Hp hp;
   Stats stats;
@@ -26,7 +25,6 @@ class Character {
     required this.race,
     required this.level,
     required this.characterclass,
-    required this.initModifier,
     required this.armorClass,
     required this.hp,
     required this.stats,

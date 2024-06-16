@@ -1,23 +1,22 @@
+import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/pages/characterview.dart';
+import 'package:provider/provider.dart';
 
 class TemplatePage extends StatelessWidget {
-  const TemplatePage({super.key});
+  TemplatePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
+    return const Column(
         children: [
           TopbarTemplates(),
           Expanded(
             child: TemplatesDisplay(),
           ),
-          NavBarTemplates(templates: true)
         ],
-      ),
     );
   }
 }
@@ -155,28 +154,30 @@ class TemplatesDisplay extends StatefulWidget {
 class _TemplatesDisplayState extends State<TemplatesDisplay> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      primary: false,
-      itemCount: chars.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CharacterPage(char: chars[index]))
-          ),
-          child: TemplateCard(
-            name: chars[index].name,
-            rasse: chars[index].race,
-            characterclass: chars[index].characterclass,
-          ),
-        );
-      },
-    );
+    return Consumer<Updater>(builder: (context, value, child) {
+      return ListView.builder(
+        scrollDirection: Axis.vertical,
+        primary: false,
+        itemCount: chars.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CharacterPage(char: chars[index]))),
+            child: TemplateCard(
+              name: chars[index].name,
+              rasse: chars[index].race,
+              characterclass: chars[index].characterclass,
+            ),
+          );
+        },
+      );
+    });
   }
 }
 
-class NavBarTemplates extends StatefulWidget {
+/*class NavBarTemplates extends StatefulWidget {
   final bool templates;
 
   const NavBarTemplates({super.key, required this.templates});
@@ -219,4 +220,4 @@ class _NavBarMyTemplateState extends State<NavBarTemplates> {
       ],
     );
   }
-}
+}*/

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/mockup.dart';
+import 'package:dmhelper/models/updater.dart';
+import 'package:provider/provider.dart';
 
 class CharactercreatorPage extends StatelessWidget {
   final bool template;
   final int index;
-  const CharactercreatorPage({super.key, required this.template, required this.index});
+
+  const CharactercreatorPage({
+    Key? key,
+    required this.template,
+    required this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +23,14 @@ class CharactercreatorPage extends StatelessWidget {
           Container(
             color: Colors.amber,
             height: 100,
-            child: const Center(
+            child: Center(
               child: Text(
                 "Character Creation!",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          Expanded(child: CharacterCreator(template: template, index: index))
+          Expanded(child: CharacterCreator(template: template, index: index)),
         ],
       ),
     );
@@ -34,7 +41,11 @@ class CharacterCreator extends StatefulWidget {
   final bool template;
   final int index;
 
-  const CharacterCreator({super.key, required this.template, required this.index});
+  const CharacterCreator({
+    Key? key,
+    required this.template,
+    required this.index,
+  }) : super(key: key);
 
   @override
   State<CharacterCreator> createState() => _CharacterCreatorState();
@@ -44,9 +55,10 @@ class _CharacterCreatorState extends State<CharacterCreator> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _levelController = TextEditingController();
   final TextEditingController _raceController = TextEditingController();
-  final TextEditingController _characterClassController = TextEditingController();
-  final TextEditingController _initModifierController = TextEditingController();
-  final TextEditingController _armorClassController = TextEditingController();
+  final TextEditingController _characterClassController =
+      TextEditingController();
+  final TextEditingController _armorClassController =
+      TextEditingController();
   final TextEditingController _hpController = TextEditingController();
   final TextEditingController _strController = TextEditingController();
   final TextEditingController _dexController = TextEditingController();
@@ -63,7 +75,6 @@ class _CharacterCreatorState extends State<CharacterCreator> {
         level: int.tryParse(_levelController.text) ?? 1,
         race: _raceController.text,
         characterclass: _characterClassController.text,
-        initModifier: int.tryParse(_initModifierController.text) ?? 0,
         armorClass: int.tryParse(_armorClassController.text) ?? 0,
         hp: Hp(
           currentHp: int.tryParse(_hpController.text) ?? 0,
@@ -85,13 +96,15 @@ class _CharacterCreatorState extends State<CharacterCreator> {
           chaProfieciency: false,
         ),
       );
-      if(widget.template == true) {
-        chars.add(newCharacter);  
-      } 
-      else if(widget.template == false) {
+
+      if (widget.template) {
+        chars.add(newCharacter);
+      } else {
         campaigns[widget.index].characters.add(newCharacter);
       }
-  });
+    });
+
+    Provider.of<Updater>(context, listen: false).refresh();
     Navigator.pop(context);
   }
 
@@ -102,7 +115,6 @@ class _CharacterCreatorState extends State<CharacterCreator> {
       _levelController,
       _raceController,
       _characterClassController,
-      _initModifierController,
       _armorClassController,
       _hpController,
       _strController,
@@ -118,7 +130,6 @@ class _CharacterCreatorState extends State<CharacterCreator> {
       "Level",
       "Race",
       "Class",
-      "Initiative Modifier",
       "Armor Class",
       "Hit Points",
       "Strength",
@@ -132,21 +143,36 @@ class _CharacterCreatorState extends State<CharacterCreator> {
     return Column(
       children: [
         Expanded(
-          child: ListView.builder(
-            itemCount: controllers.length,
-            itemBuilder: (context, index) {
-              return InputCard(
-                desc: descriptions[index],
-                controller: controllers[index],
-              );
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
-            onPressed: _submitCharacter,
-            child: const Text('Submit'),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 3.0,
+                    ),
+                    itemCount: 12,
+                    itemBuilder: (context, index) {
+                      return InputCard(
+                        desc: descriptions[index],
+                        controller: controllers[index],
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: ElevatedButton(
+                    onPressed: _submitCharacter,
+                    child: const Text('Submit'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -158,32 +184,40 @@ class InputCard extends StatelessWidget {
   final String desc;
   final TextEditingController controller;
 
-  const InputCard({super.key, required this.desc, required this.controller});
+  const InputCard({
+    Key? key,
+    required this.desc,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-      child: Container(
-        height: 100,
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(flex: 2, child: Text(desc)),
-                Expanded(
-                  flex: 3,
-                  child: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ],
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                desc,
+                style: TextStyle(fontSize: 16),
+              ),
             ),
-          ),
+            Expanded(
+              flex: 2,
+              child: TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

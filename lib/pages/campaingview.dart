@@ -1,8 +1,10 @@
+import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/characterview.dart';
 import 'package:dmhelper/pages/comabtprepteam.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:dmhelper/models/mockup.dart';
+import 'package:provider/provider.dart';
 
 class CampaingViewPage extends StatelessWidget {
   final int index;
@@ -86,16 +88,18 @@ class Campaingview extends StatefulWidget {
 class _CampaingviewState extends State<Campaingview> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(8.0),
-      itemCount: campaigns[widget.index].characters.length,
-      itemBuilder: (context, characterIndex) {
-        return CharacterCard(
-          indexCampaing: widget.index,
-          indexCharacter: characterIndex,
-        );
-      },
-    );
+    return Consumer<Updater>(builder: (context, value, child) {
+      return ListView.builder(
+        padding: const EdgeInsets.all(8.0),
+        itemCount: campaigns[widget.index].characters.length,
+        itemBuilder: (context, characterIndex) {
+          return CharacterCard(
+            indexCampaing: widget.index,
+            indexCharacter: characterIndex,
+          );
+        },
+      );
+    });
   }
 }
 

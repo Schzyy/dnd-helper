@@ -13,7 +13,6 @@ List<Campaign> campaigns = [
         level: 13,
         race: "Altersheim",
         characterclass: "Barbar",
-        initModifier: 4,
         armorClass: 17,
         hp: Hp(
           maxHp: 60,
@@ -41,7 +40,6 @@ List<Campaign> campaigns = [
         level: 13,
         race: "Gamer",
         characterclass: "Barbar",
-        initModifier: 4,
         armorClass: 17,
         hp: Hp(
           maxHp: 60,
@@ -69,7 +67,6 @@ List<Campaign> campaigns = [
         level: 13,
         race: "Balkan",
         characterclass: "Barbar",
-        initModifier: 4,
         armorClass: 17,
         hp: Hp(
           maxHp: 60,
@@ -102,7 +99,6 @@ List<Campaign> campaigns = [
         level: 13,
         race: "unknown",
         characterclass: "Barbar",
-        initModifier: 4,
         armorClass: 17,
         hp: Hp(
           maxHp: 60,
@@ -130,7 +126,6 @@ List<Campaign> campaigns = [
         level: 13,
         race: "Mensch",
         characterclass: "Barbar",
-        initModifier: 4,
         armorClass: 17,
         hp: Hp(
           maxHp: 60,
@@ -166,7 +161,6 @@ List<Character> chars = [
     level: 10, 
     race: "Gnom",
     characterclass: "Mage", 
-    initModifier: 6, 
     armorClass: 12, 
     hp: Hp(
       currentHp: 60,
