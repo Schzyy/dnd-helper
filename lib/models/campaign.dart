@@ -10,6 +10,9 @@ class Campaign {
 }
 
 class Character {
+  bool participate;
+  int amount;
+  int currentInit;
   bool good;
   String name;
   int level;
@@ -20,6 +23,9 @@ class Character {
   Stats stats;
 
   Character({
+    required this.participate,
+    required this.amount,
+    required this.currentInit,
     required this.good,
     required this.name,
     required this.race,
@@ -74,13 +80,9 @@ class Stats {
 }
 
 class Combat {
-  List<bool> partake = [
-
-  ];
-  List<Character> heroes = [
-  ];
-  List<Character> opponentes = [
-  ];
+  List<Character> partake = [];
+  List<Character> heroes = [];
+  List<Character> opponentes = [];
 }
 
 //Help für die CharacterViewSeite

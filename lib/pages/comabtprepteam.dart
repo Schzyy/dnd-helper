@@ -1,21 +1,40 @@
+import 'package:dmhelper/models/updater.dart';
+import 'package:dmhelper/pages/combatprepenemies.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
+import 'package:provider/provider.dart';
 
 class CombatPrepTeam extends StatelessWidget {
   final int indexCampaign;
 
   const CombatPrepTeam({super.key, required this.indexCampaign});
 
-  @override
+  void addToCombatHeroes() {
+    for (var char in campaigns[indexCampaign].characters) {
+      if (char.participate) {
+        combat.heroes.add(char);
+        print(combat.heroes);
+      }
+    }
+    for(var char in combat.heroes) {
+      combat.partake.add(char);
+      print(combat.partake);
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Combat Preparations Team"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            combat.heroes.clear();
+            combat.partake.clear();
+            Navigator.pop(context); 
+          },
         ),
       ),
       body: Stack(
@@ -52,7 +71,11 @@ class CombatPrepTeam extends StatelessWidget {
             right: 20,
             child: FloatingActionButton(
               onPressed: () {
-                
+                addToCombatHeroes();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CombatPrepEnemies()));
               },
               child: const Text("Enemies"),
             ),
@@ -65,7 +88,6 @@ class CombatPrepTeam extends StatelessWidget {
 
 class CombatPrepTeamList extends StatefulWidget {
   final int indexCampaign;
-
   const CombatPrepTeamList({
     super.key,
     required this.indexCampaign,
@@ -76,17 +98,25 @@ class CombatPrepTeamList extends StatefulWidget {
 }
 
 class _CombatPrepTeamListState extends State<CombatPrepTeamList> {
+  late Map<Character,bool>? charsToFight = {};
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: campaigns[widget.indexCampaign].characters.length,
-      itemBuilder: (context, index) {
-        return CombatPrepTeamCard(
-          campaignIndex: widget.indexCampaign,
-          index: index,
-        );
-      },
-    );
+    return Consumer<Updater>(builder: (context, value, child) {
+      return ListView.builder(
+        itemCount: campaigns[widget.indexCampaign].characters.length,
+        itemBuilder: (context, index) {
+          return CombatPrepTeamCard(
+            campaignIndex: widget.indexCampaign,
+            index: index,
+          );
+        },
+      );
+    });
   }
 }
 
@@ -110,6 +140,7 @@ class _CombatPrepTeamCardState extends State<CombatPrepTeamCard> {
   void toggleIcon(int indexCampaign, int indexCharacter) {
     setState(() {
       add = !add;
+      campaigns[widget.campaignIndex].characters[widget.index].participate = add;
     });
   }
 

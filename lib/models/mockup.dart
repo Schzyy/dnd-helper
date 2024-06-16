@@ -8,6 +8,9 @@ List<Campaign> campaigns = [
     name: 'Azeroth',
     characters: [
       Character(
+        participate: true,
+        amount: 0,
+        currentInit: 0,
         good: true,
         name: "Hugo",
         level: 13,
@@ -35,6 +38,9 @@ List<Campaign> campaigns = [
         )
       ),
       Character(
+        participate: true,
+        amount: 0,
+        currentInit: 0,
         good: true,
         name: "Lakschuh",
         level: 13,
@@ -62,6 +68,9 @@ List<Campaign> campaigns = [
         )
       ),  
     Character(
+        participate: false,
+        amount: 0,
+        currentInit: 0,
         good: true,
         name: "Bando",
         level: 13,
@@ -94,6 +103,9 @@ List<Campaign> campaigns = [
     name: 'Blackrockspire',
     characters: [
       Character(
+        participate: false,
+        amount: 0,
+        currentInit: 0,
         good: true,
         name: "Hugo",
         level: 13,
@@ -121,6 +133,9 @@ List<Campaign> campaigns = [
         )
       ),
       Character(
+        participate: false,
+        amount: 0,
+        currentInit: 0,
         good: true,
         name: "Lakschuh",
         level: 13,
@@ -156,6 +171,9 @@ Combat combat = Combat();
 //Templateliste Momentan nur gegner
 List<Character> chars = [
   Character(
+    participate: false,
+    amount: 0,
+    currentInit: 0,
     good: false,
     name: "Gomme",
     level: 10, 

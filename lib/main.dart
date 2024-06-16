@@ -20,8 +20,11 @@ class CampaignStart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
+    return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Space'
+      ),
+      home: const Home(),
     );
   }
 }
@@ -99,7 +102,6 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
       MaterialPageRoute(builder: (context) => const Campaigncreator()),
     );
     if (result != null) {
-      Provider.of<Updater>(context, listen: false).refresh();
     }
   }
 

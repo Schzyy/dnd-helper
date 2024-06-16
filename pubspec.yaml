@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: 
+  provider:
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +18,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Space
+      fonts:
+        - asset: lib/assets/Space_Grotesk_Font/SpaceGrotesk-Regular.ttf

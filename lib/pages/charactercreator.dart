@@ -70,6 +70,9 @@ class _CharacterCreatorState extends State<CharacterCreator> {
   void _submitCharacter() {
     setState(() {
       final newCharacter = Character(
+        currentInit: 0,
+        amount: 0,
+        participate: true,
         good: true,
         name: _nameController.text,
         level: int.tryParse(_levelController.text) ?? 1,
@@ -96,10 +99,11 @@ class _CharacterCreatorState extends State<CharacterCreator> {
           chaProfieciency: false,
         ),
       );
-
       if (widget.template) {
+        newCharacter.participate = false;
         chars.add(newCharacter);
       } else {
+        newCharacter.participate = true;
         campaigns[widget.index].characters.add(newCharacter);
       }
     });
@@ -149,7 +153,7 @@ class _CharacterCreatorState extends State<CharacterCreator> {
               children: [
                 Expanded(
                   child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 10.0,
