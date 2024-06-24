@@ -9,10 +9,10 @@ class CharactercreatorPage extends StatelessWidget {
   final int index;
 
   const CharactercreatorPage({
-    Key? key,
+    super.key,
     required this.template,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +42,10 @@ class CharacterCreator extends StatefulWidget {
   final int index;
 
   const CharacterCreator({
-    Key? key,
+    super.key,
     required this.template,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   State<CharacterCreator> createState() => _CharacterCreatorState();

@@ -7,6 +7,9 @@ class Campaign {
     required this.name,
     required this.characters,
   });
+  void removeCharacter(int i) {
+    characters.removeAt(i);
+  }
 }
 
 class Character {
@@ -62,6 +65,28 @@ class Stats {
   bool wisProfieciency;
   int cha;
   bool chaProfieciency;
+
+  void changePrfStr(String prf) {
+    if(prf == "str") {
+      strProfieciency = !strProfieciency;
+    }
+    if(prf == "dex") {
+      dexProfieciency = !dexProfieciency;
+    }
+    if(prf == "con") {
+      conProfieciency = !conProfieciency;
+    }
+    if(prf == "int") {
+      intProfieciency = !intProfieciency;
+    }
+    if(prf == "wis") {
+      wisProfieciency = !wisProfieciency;
+    }
+    if(prf == "cha") {
+      chaProfieciency = !chaProfieciency;
+    }
+  }
+  
 
   Stats({
     required this.str,

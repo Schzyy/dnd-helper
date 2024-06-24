@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/pages/characterview.dart';
 import 'package:provider/provider.dart';
+import 'package:dmhelper/models/updater.dart';
 
 class TemplatePage extends StatelessWidget {
   TemplatePage({super.key});
@@ -34,7 +35,6 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
       context,
       MaterialPageRoute(builder: (context) => const CharactercreatorPage(template: true, index: 0)),
     );
-    setState(() {});
   }
 
   @override
@@ -57,11 +57,17 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 30, 15, 0),
             child: Container(
-              color: Colors.white,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.white,
+              ),
               height: 50,
               width: 50,
               child: GestureDetector(
-                child: const Icon(Icons.add),
+                child: const Icon(
+                  Icons.add,
+                  size: 40,
+                ),
                 onTap: () {
                   _navigateAndRefresh(context);
                 },
@@ -78,67 +84,116 @@ class TemplateCard extends StatelessWidget {
   final String name;
   final String rasse;
   final String characterclass;
-
+  final int armorclass;
+  final int init;
+  final int index;
+  
   const TemplateCard({
     super.key,
     required this.name,
     required this.rasse,
-    required this.characterclass,
+    required this.characterclass, 
+    required this.armorclass, 
+    required this.init, 
+    required this.index,
   });
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 180,
       child: Card(
-        margin: const EdgeInsets.all(10),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 30, 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        color: const Color.fromARGB(255, 55, 55, 55),
+        margin: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10)
+        ),
+        child: Row(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 223, 54, 77),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  bottomLeft: Radius.circular(10)
+                )
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10,10,10,0),
+                      child: Icon(
+                        Icons.battery_saver,
+                        size: 30,
+                      ),
+                    ),
+                  RotatedBox(
+                    quarterTurns: 135,
+                    child: Text(
+                      "Enemy",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(255, 128, 21, 35)
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            fontSize: 35
+                          ),
+                        ),
+                        GestureDetector(
+                          child: const Icon(
+                            Icons.add_circle,
+                            size: 30,
+                          ),
+                          onTap: () {
+                            chars.removeAt(index);
+                            Provider.of<Updater>(context, listen: false).refresh();
+                          }
+                        )
+                      ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "$rasse    $characterclass",
+                          style: const TextStyle(
+                            fontSize: 20,
+                          ),
+                          ),
+                        Text(
+                          "+ $init     $armorclass",
+                          style: const TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-              Container(
-                color: Colors.amber,
-                height: 5,
-              ),
-              Text(
-                'Race: $rasse',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
-              ),
-              Text(
-                'Class: $characterclass',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.check_circle, color: Colors.blue),
-                  SizedBox(height: 5),
-                ],
-              ),
-              const SizedBox(height: 10),
-            ],
-          ),
+            )
+          ],
         ),
+        
       ),
     );
   }
@@ -169,6 +224,9 @@ class _TemplatesDisplayState extends State<TemplatesDisplay> {
               name: chars[index].name,
               rasse: chars[index].race,
               characterclass: chars[index].characterclass,
+              armorclass: chars[index].armorClass,
+              init: chars[index].stats.dex,
+              index: index,
             ),
           );
         },
@@ -176,48 +234,3 @@ class _TemplatesDisplayState extends State<TemplatesDisplay> {
     });
   }
 }
-
-/*class NavBarTemplates extends StatefulWidget {
-  final bool templates;
-
-  const NavBarTemplates({super.key, required this.templates});
-
-  @override
-  State<NavBarTemplates> createState() => _NavBarMyTemplateState();
-}
-
-class _NavBarMyTemplateState extends State<NavBarTemplates> {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 50,
-            color: widget.templates ? Colors.blueGrey : Colors.black,
-            child: GestureDetector(
-              child: const Center(
-                child: Text("TEMPLATES", style: TextStyle(color: Colors.white)),
-              ),
-              onTap: () {},
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: 50,
-            color: widget.templates ? Colors.black : Colors.blueGrey,
-            child: GestureDetector(
-              child: const Center(
-                child: Text("MY CAMPAIGNS", style: TextStyle(color: Colors.white)),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}*/
