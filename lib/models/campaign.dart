@@ -1,4 +1,21 @@
+import 'package:flutter/material.dart';
+
+var screenSize;
+void setScreenSize(var screen) {
+  screenSize = screen;
+}
+
+
 //Datenmodel für die Campagne und die Characters
+void removeCampaing(List<Campaign> campaigns) {
+
+}
+
+void createCampaign(List<Campaign> campaign, String name) {
+  Campaign newCampaing = Campaign(name: name, characters: []);
+  campaign.add(newCampaing);
+}
+
 class Campaign {
   String name;
   List<Character> characters;

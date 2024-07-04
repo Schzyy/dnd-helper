@@ -40,12 +40,12 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(15, 10, 15, 30),
+      margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
+            padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
             child: Text(
               "My Characters",
               style: TextStyle(
@@ -55,14 +55,14 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 15, 0),
+            padding: const EdgeInsets.fromLTRB(0, 30, 5, 0),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.white,
               ),
-              height: 50,
-              width: 50,
+              height: 40,
+              width: 40,
               child: GestureDetector(
                 child: const Icon(
                   Icons.add,
@@ -100,10 +100,10 @@ class TemplateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180,
+      height: 130,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
-        margin: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+        margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10)
         ),
@@ -149,21 +149,30 @@ class TemplateCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 35
+                        Flexible(
+                          flex: 4,
+                          child: Text(
+                            name,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 30
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          child: const Icon(
-                            Icons.add_circle,
-                            size: 30,
+                        Flexible(
+                          flex: 1,
+                          child: GestureDetector(
+                            child: const Icon(
+                              Icons.more_vert,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                            onTap: () {
+                              
+                              chars.removeAt(index);
+                              Provider.of<Updater>(context, listen: false).refresh();
+                            }
                           ),
-                          onTap: () {
-                            chars.removeAt(index);
-                            Provider.of<Updater>(context, listen: false).refresh();
-                          }
                         )
                       ],
                     ),
@@ -173,16 +182,44 @@ class TemplateCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "$rasse    $characterclass",
-                          style: const TextStyle(
-                            fontSize: 20,
+                        Flexible(
+                          flex: 1,
+                          child: Text(
+                            rasse,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                            ),
+                        ),
+                          Flexible(
+                          flex: 1,
+                            child: Text(
+                            characterclass,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                            ),
                           ),
+                          Flexible(
+                          flex: 1,
+                            child: Text(
+                            "+ $init",
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                            ),
                           ),
-                        Text(
-                          "+ $init     $armorclass",
-                          style: const TextStyle(
-                            fontSize: 20,
+                        Flexible(
+                          flex: 1,
+                          child: Text(
+                            "$armorclass" ,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ],
