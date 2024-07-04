@@ -47,8 +47,6 @@ class CombatPrepEnemies extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const CharactercreatorPage(
-                        template: true,
-                        index: 0,
                       ),
                     ),
                   );

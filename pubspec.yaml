@@ -1,5 +1,5 @@
 name: dmhelper
-description: "A new Flutter project."
+description: A new Flutter project.
 publish_to: 'none'
 version: 0.1.0
 
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider:
+  provider: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -23,3 +23,7 @@ flutter:
     - family: Space
       fonts:
         - asset: lib/assets/Space_Grotesk_Font/SpaceGrotesk-Regular.ttf
+    - family: DmHelper
+      fonts:
+        - asset: lib/assets/OtherFont/DmHelder.ttf
+    

@@ -34,7 +34,7 @@ class CampaingViewPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          CharactercreatorPage(template: false, index: index),
+                          CharactercreatorPage(),
                     ),
                   );
                 },

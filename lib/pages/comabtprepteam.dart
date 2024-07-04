@@ -50,8 +50,7 @@ class CombatPrepTeam extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => CharactercreatorPage(
-                        template: false,
-                        index: indexCampaign,
+                        
                       ),
                     ),
                   );

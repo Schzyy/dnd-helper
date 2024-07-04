@@ -4,20 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/pages/characterview.dart';
 import 'package:provider/provider.dart';
-import 'package:dmhelper/models/updater.dart';
 
 class TemplatePage extends StatelessWidget {
   TemplatePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-        children: [
-          TopbarTemplates(),
-          Expanded(
-            child: TemplatesDisplay(),
-          ),
-        ],
+    return const Scaffold(
+      body: Column(
+          children: [
+            TopbarTemplates(),
+            Expanded(
+              child: TemplatesDisplay(),
+            ),
+          ],
+      ),
     );
   }
 }
@@ -33,7 +34,7 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
   void _navigateAndRefresh(BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CharactercreatorPage(template: true, index: 0)),
+      MaterialPageRoute(builder: (context) => const CharactercreatorPage()),
     );
   }
 
