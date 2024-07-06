@@ -64,7 +64,7 @@ class _CharactercreatorState extends State<Charactercreator> {
 
   void saveCharacter(
       int charIndex, int campaignIndex, bool newChar, bool good) {
-        Character newChar = Character(
+    Character newChar = Character(
         participate: false,
         amount: 0,
         currentInit: 0,
@@ -271,11 +271,14 @@ class _CharactercreatorState extends State<Charactercreator> {
                             size: 40,
                           ),
                           onTap: () {
+                            setState(() {
                             saveCharacter(
                                 widget.charIndex,
                                 widget.campaignIndex,
                                 widget.newChar,
-                                widget.good);
+                                widget.good
+                              );  
+                            });  
                           },
                         ),
                       ),
@@ -373,32 +376,34 @@ class _CharactercreatorState extends State<Charactercreator> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                            child: Text("Class"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                            child: classEditing
-                                ? TextField(
-                                    controller: classController,
-                                    autofocus: true,
-                                    onSubmitted: (value) {
-                                      if (classController.text.isEmpty) {
-                                        classController.text = "-";
-                                      }
-                                      setState(() {
-                                        classEditing = false;
-                                      });
-                                    },
-                                  )
-                                : Text(classController.text),
-                          )
-                        ],
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                              child: Text("Class"),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                              child: classEditing
+                                  ? TextField(
+                                      controller: classController,
+                                      autofocus: true,
+                                      onSubmitted: (value) {
+                                        if (classController.text.isEmpty) {
+                                          classController.text = "-";
+                                        }
+                                        setState(() {
+                                          classEditing = false;
+                                        });
+                                      },
+                                    )
+                                  : Text(classController.text),
+                            )
+                          ],
+                        ),
                       ),
                       onTap: () {
                         setState(() {
@@ -428,11 +433,11 @@ class _CharactercreatorState extends State<Charactercreator> {
                           child: GestureDetector(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
                                   child: Text("Strength",
                                       style: TextStyle(
                                           color: strProf
@@ -444,17 +449,13 @@ class _CharactercreatorState extends State<Charactercreator> {
                                       const EdgeInsets.fromLTRB(10, 0, 0, 10),
                                   child: strProf
                                       ? Text(
-                                          "${strController.text}     + ${toProf(int.parse(strController
-                                                          .text)) +
-                                                      returnProf(int.parse(
-                                                          levelController
-                                                              .text))}",
+                                          "${strController.text}     + ${toProf(int.parse(strController.text)) + returnProf(int.parse(levelController.text))}",
                                           style: const TextStyle(
                                             color: Colors.blue,
                                           ),
                                         )
-                                      : Text("${strController.text}     + ${toProf(int.parse(
-                                                  strController.text))}"),
+                                      : Text(
+                                          "${strController.text}     + ${toProf(int.parse(strController.text))}"),
                                 )
                               ],
                             ),
@@ -477,7 +478,8 @@ class _CharactercreatorState extends State<Charactercreator> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
                                   child: Text("Dexterity",
                                       style: TextStyle(
                                           color: dexProf
@@ -567,7 +569,8 @@ class _CharactercreatorState extends State<Charactercreator> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
                                   child: Text("Intelligence",
                                       style: TextStyle(
                                           color: intProf
@@ -579,16 +582,13 @@ class _CharactercreatorState extends State<Charactercreator> {
                                       const EdgeInsets.fromLTRB(10, 0, 0, 10),
                                   child: intProf
                                       ? Text(
-                                          "${intController.text}     + ${toProf(int.parse(
-                                                          intController.text)) +
-                                                      returnProf(int.parse(
-                                                          levelController
-                                                              .text))}",
+                                          "${intController.text}     + ${toProf(int.parse(intController.text)) + returnProf(int.parse(levelController.text))}",
                                           style: const TextStyle(
                                             color: Colors.blue,
                                           ),
                                         )
-                                      : Text("${intController.text}     + ${toProf(int.parse(intController.text))}"),
+                                      : Text(
+                                          "${intController.text}     + ${toProf(int.parse(intController.text))}"),
                                 )
                               ],
                             ),
@@ -618,7 +618,8 @@ class _CharactercreatorState extends State<Charactercreator> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
                                   child: Text("Wisdom",
                                       style: TextStyle(
                                           color: wisProf
@@ -630,16 +631,13 @@ class _CharactercreatorState extends State<Charactercreator> {
                                       const EdgeInsets.fromLTRB(10, 0, 0, 10),
                                   child: wisProf
                                       ? Text(
-                                          "${wisController.text}     + ${toProf(int.parse(
-                                                          wisController.text)) +
-                                                      returnProf(int.parse(
-                                                          levelController
-                                                              .text))}",
+                                          "${wisController.text}     + ${toProf(int.parse(wisController.text)) + returnProf(int.parse(levelController.text))}",
                                           style: const TextStyle(
                                             color: Colors.blue,
                                           ),
                                         )
-                                      : Text("${wisController.text}     + ${toProf(int.parse(wisController.text))}"),
+                                      : Text(
+                                          "${wisController.text}     + ${toProf(int.parse(wisController.text))}"),
                                 )
                               ],
                             ),
@@ -662,7 +660,8 @@ class _CharactercreatorState extends State<Charactercreator> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
                                   child: Text("Charisma",
                                       style: TextStyle(
                                           color: chaProf
@@ -674,16 +673,13 @@ class _CharactercreatorState extends State<Charactercreator> {
                                       const EdgeInsets.fromLTRB(10, 0, 0, 10),
                                   child: chaProf
                                       ? Text(
-                                          "${chaController.text}     + ${toProf(int.parse(
-                                                          chaController.text)) +
-                                                      returnProf(int.parse(
-                                                          levelController
-                                                              .text))}",
+                                          "${chaController.text}     + ${toProf(int.parse(chaController.text)) + returnProf(int.parse(levelController.text))}",
                                           style: const TextStyle(
                                             color: Colors.blue,
                                           ),
                                         )
-                                      : Text("${chaController.text}     + ${toProf(int.parse(chaController.text))}"),
+                                      : Text(
+                                          "${chaController.text}     + ${toProf(int.parse(chaController.text))}"),
                                 )
                               ],
                             ),
@@ -721,21 +717,23 @@ class _CharactercreatorState extends State<Charactercreator> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Armorclass"),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: Text(armorController.text),
-                                )
-                              ],
+                            child: Container(
+                              color: AppProperties.cardColor2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                    child: Text("Armorclass"),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                                    child: Text(armorController.text),
+                                  )
+                                ],
+                              ),
                             ),
                             onTap: () {
                               setState(() {
