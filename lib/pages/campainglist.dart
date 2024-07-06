@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:dmhelper/models/campaign.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/updater.dart';
@@ -5,6 +7,7 @@ import 'package:dmhelper/pages/campaingview.dart';
 import 'package:dmhelper/pages/templates.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:provider/provider.dart';
+import 'package:dmhelper/models/pallete.dart';
 
 class CampaignStart extends StatelessWidget {
   const CampaignStart({super.key});
@@ -49,7 +52,7 @@ class _HomeState extends State<Home> {
   int currentPageIndex = 1;
 
   final List<Widget> pages = [
-    TemplatePage(),
+    const TemplatePage(),
     const CampaignSelector(),
   ];
 
@@ -123,6 +126,7 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
     if(newCampaingNameController.text.isNotEmpty) {
       newCampaingNameController.text = "";
     } 
+    Provider.of<Updater>(context, listen: false).refresh();
     Navigator.pop(context);
   }
 
@@ -131,57 +135,61 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
       context: context, 
       builder: (context) => AlertDialog(
         backgroundColor: Colors.black,
-        content: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                "Create your Campaing!",
-                style: TextStyle(
-                  fontSize: 30,
-                ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "Create your Campaing!",
+              style: TextStyle(
+                fontSize: 30,
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                child: TextField(
-                  controller: newCampaingNameController,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,10,0,10),
+              child: TextField(
+                controller: newCampaingNameController,
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,10.0,0,0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: cancel,
-                        child: Container(
-                          height: 50,
-                          width: 100,
-                            color: Colors.white,
-                          child: const Icon(
-                              Icons.remove,
-                            )
-                        ),
-                
-                    ),
-                    GestureDetector(
-                      onTap: save,
-                        child: Container(
-                          height: 50,
-                          width: 100,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,10.0,0,0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: cancel,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppProperties.bRadius),
                           color: Colors.white,
-                          child: const Icon(
-                            Icons.add,
-                            size: 30,
-                          ),
                         ),
-                
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                        height: 50,
+                        width: 60,
+        
+                        child: const Icon(
+                            Icons.remove,
+                          )
+                      ),
+              
+                  ),
+                  GestureDetector(
+                    onTap: save,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                          color: Colors.white,
+                        ),
+                        height: 50,
+                        width: 60,
+                        child: const Icon(
+                          Icons.add,
+                        ),
+                      ),
+              
+                  ),
+                ],
+              ),
+            )
+          ],
         )
       ),
     );
@@ -194,13 +202,18 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
-            child: Text(
-              "My Campaigns",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 10, 0),
+            child: SizedBox(
+              width: AppProperties.screenWidth(context)*0.6,
+              child: FittedBox(
+                child: Text(
+                  "My Campaigns",
+                  style: TextStyle(
+                    fontSize: AppProperties.screenWidth(context)*0.15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
@@ -208,15 +221,15 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
             padding: const EdgeInsets.fromLTRB(0, 30, 5, 0),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(AppProperties.bRadius),
                 color: Colors.white
               ),
-              height: 40,
-              width: 40,
+              height: AppProperties.screenHeight(context)*0.15,
+              width: AppProperties.screenWidth(context)*0.15,
               child: GestureDetector(
                 child: const Icon(
                   Icons.add,
-                  size: 40,
+                  size: 30,
                 ),
                 onTap: () {
                   goToCampaignCreation();
@@ -233,11 +246,13 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
 class CampaignOverviewCard extends StatelessWidget {
   final String title;
   final int characters;
+  final int index;
 
   const CampaignOverviewCard({
     super.key,
     required this.title,
-    required this.characters,
+    required this.characters, 
+    required this.index,
   });
 
 
@@ -245,39 +260,54 @@ class CampaignOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> rotatingColorTop = [
+      AppProperties.allyYellow,
+      AppProperties.heroPurple,
+      AppProperties.enemyRed,
+    ];
+    List<Color> rotatingColorFont = [
+      AppProperties.enemyRedDark,
+      AppProperties.allyYellow,
+      AppProperties.herpPurpleDark
+    ];
+
     return SizedBox(
+      height: AppProperties.screenHeight(context)*0.5,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
         margin: const EdgeInsets.fromLTRB(10,10,10,5),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
+          borderRadius: BorderRadius.circular(AppProperties.cardRadius)
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              decoration: const BoxDecoration(
-                color: Colors.amber,
+              decoration: BoxDecoration(
+                color: rotatingColorTop[index%3],
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10)
+                  topLeft: Radius.circular(AppProperties.cardRadius),
+                  topRight: Radius.circular(AppProperties.cardRadius)
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(15.0,5.0,15.0,5),
+                    padding: const EdgeInsets.fromLTRB(15.0,5.0,15.0,5),
                     child: Icon(
-                      Icons.house,
+                      Icons.door_sliding,
                       size: 40,
+                      color: rotatingColorFont[index%3],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(15.0,0,15.0,0),
+                    padding: const EdgeInsets.fromLTRB(15.0,0,15.0,0),
                     child: Text(
                       "Campaign",
                       style: TextStyle(
-                        color: Colors.black
+                        color: rotatingColorFont[index%3],
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -287,34 +317,16 @@ class CampaignOverviewCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
-                  flex: 3,
-                  child: Padding(
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
-                    child: Container(
-                      child: Text(
-                        title,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
+                    child: Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
-                    child: GestureDetector(
-                      child: const Icon(
-                        Icons.three_p_sharp,
-                        size: 40,
-                      ),
-                      onTap: () {}
-                    ),
-                  ),
-                )
               ],
             ),
             const SizedBox(
@@ -366,6 +378,7 @@ class _CampaignsListState extends State<CampaignsList> {
             child: CampaignOverviewCard(
               title: campaigns[index].name,
               characters: campaigns[index].characters.length,
+              index: index,
             ),
           );
         },

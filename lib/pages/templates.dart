@@ -1,12 +1,14 @@
+import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/pages/characterview.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class TemplatePage extends StatelessWidget {
-  TemplatePage({super.key});
+  const TemplatePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,13 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
   void _navigateAndRefresh(BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CharactercreatorPage()),
+      MaterialPageRoute(builder: (context) => const Charactercreator(
+        campaignIndex: 0,
+        charIndex: 0,
+        existingChar: null,
+        good: false,
+        newChar: true,
+      )),
     );
   }
 
@@ -101,7 +109,7 @@ class TemplateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 130,
+      height: AppProperties.screenHeight(context)*0.5,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
         margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
@@ -112,7 +120,7 @@ class TemplateCard extends StatelessWidget {
           children: [
             Container(
               decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 223, 54, 77),
+                color: AppProperties.enemyRed,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   bottomLeft: Radius.circular(10)
@@ -124,7 +132,7 @@ class TemplateCard extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.fromLTRB(10,10,10,0),
                       child: Icon(
-                        Icons.battery_saver,
+                        FontAwesomeIcons.hammer,
                         size: 30,
                       ),
                     ),
@@ -134,7 +142,8 @@ class TemplateCard extends StatelessWidget {
                       "Enemy",
                       style: TextStyle(
                         fontSize: 20,
-                        color: Color.fromARGB(255, 128, 21, 35)
+                        color: AppProperties.enemyRedDark,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                   )
@@ -164,7 +173,7 @@ class TemplateCard extends StatelessWidget {
                           flex: 1,
                           child: GestureDetector(
                             child: const Icon(
-                              Icons.more_vert,
+                              Icons.remove,
                               size: 30,
                               color: Colors.white,
                             ),
@@ -215,12 +224,21 @@ class TemplateCard extends StatelessWidget {
                           ),
                         Flexible(
                           flex: 1,
-                          child: Text(
-                            "$armorclass" ,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              const Icon(
+                                FontAwesomeIcons.shield,
+                                size: 35,
+                                color: AppProperties.enemyRed,
+                              ),
+                              Text(
+                                "$armorclass",
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                )
+                              )
+                            ],
                           ),
                         ),
                       ],

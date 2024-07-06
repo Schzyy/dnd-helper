@@ -1,11 +1,3 @@
-import 'package:flutter/material.dart';
-
-var screenSize;
-void setScreenSize(var screen) {
-  screenSize = screen;
-}
-
-
 //Datenmodel für die Campagne und die Characters
 void removeCampaing(List<Campaign> campaigns) {
 
@@ -39,6 +31,7 @@ class Character {
   String race;
   String characterclass;
   int armorClass;
+  int walkingspeed;
   Hp hp;
   Stats stats;
 
@@ -52,6 +45,7 @@ class Character {
     required this.level,
     required this.characterclass,
     required this.armorClass,
+    required this.walkingspeed,
     required this.hp,
     required this.stats,
   });
@@ -105,7 +99,7 @@ class Stats {
   }
   
 
-  Stats({
+  Stats( {
     required this.str,
     required this.strProfieciency,
     required this.dex,

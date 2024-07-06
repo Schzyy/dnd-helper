@@ -15,12 +15,10 @@ class CombatPrepTeam extends StatelessWidget {
     for (var char in campaigns[indexCampaign].characters) {
       if (char.participate) {
         combat.heroes.add(char);
-        print(combat.heroes);
       }
     }
     for(var char in combat.heroes) {
       combat.partake.add(char);
-      print(combat.partake);
     }
   }
 
@@ -49,8 +47,12 @@ class CombatPrepTeam extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CharactercreatorPage(
-                        
+                      builder: (context) => Charactercreator(
+                        campaignIndex: indexCampaign,
+                        charIndex: 0,
+                        existingChar: null,
+                        good: true,
+                        newChar: true,                        
                       ),
                     ),
                   );

@@ -46,7 +46,12 @@ class CombatPrepEnemies extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CharactercreatorPage(
+                      builder: (context) => const Charactercreator(
+                        campaignIndex: 0,
+                        charIndex: 0,
+                        existingChar: null,
+                        good: false,
+                        newChar: true,
                       ),
                     ),
                   );

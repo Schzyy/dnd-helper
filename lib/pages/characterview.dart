@@ -68,8 +68,8 @@ class _CharacterViewPageState extends State<CharacterViewPage> {
           margin: const EdgeInsets.symmetric(vertical: 5),
           child: ListTile(
             leading: CircleAvatar(
-              child: Text(attributeNames[index][0]),
               backgroundColor: Colors.blueAccent,
+              child: Text(attributeNames[index][0]),
             ),
             title: Text(
               attributeNames[index],
