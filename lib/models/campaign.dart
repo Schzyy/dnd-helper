@@ -24,6 +24,8 @@ class Campaign {
 class Character {
   bool participate;
   int amount;
+  int initiative = 0;
+  int initModifier = 0;
   int currentInit;
   bool good;
   String name;
@@ -34,6 +36,14 @@ class Character {
   int walkingspeed;
   Hp hp;
   Stats stats;
+
+  int returnInitModifier(int i) {
+    i = i - 10;
+    double iTwo = i.toDouble();
+    iTwo = iTwo / 2;
+    i = iTwo.toInt();
+    return i;
+  }
 
   Character({
     required this.participate,

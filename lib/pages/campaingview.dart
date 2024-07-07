@@ -1,147 +1,101 @@
+import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/models/updater.dart';
-import 'package:dmhelper/pages/characterview.dart';
 import 'package:dmhelper/pages/comabtprepteam.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
-import 'package:dmhelper/models/mockup.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class CampaingViewPage extends StatelessWidget {
+class CampaignViewPage extends StatelessWidget {
   final int index;
-  const CampaingViewPage({super.key, required this.index});
+
+  const CampaignViewPage({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              const CampaignViewTopBar(),
-              CampaingViewAddHero(campaingIndex: index),
-              Expanded(
-                child: Campaingview(index: index),
-              ),
-            ],
-          ),
-          Positioned(
-              bottom: 30,
-              right: 20,
-              child: GestureDetector(
-                onTap: () {
-              Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CombatPrepTeam(indexCampaign: index),
-                      ),
-                    );
-            },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppProperties.herpPurpleDark,
-                    borderRadius: BorderRadius.circular(AppProperties.bRadius)
-                  ),
-                  height: 50,
-                  width: 50,
-                  child: FittedBox(child: Icon(Icons.keyboard_double_arrow_right)),
-                ),
-              ),
-            ),
-            
-        ],
+      body: CampaignView(
+        index: index,
       ),
     );
   }
 }
 
+class CampaignView extends StatefulWidget {
+  final int index;
 
-class CampaingViewAddHero extends StatefulWidget {
-  const CampaingViewAddHero({super.key, required this.campaingIndex});
-  final int campaingIndex;
+  const CampaignView({super.key, required this.index});
 
   @override
-  State<CampaingViewAddHero> createState() => _CampaingViewAddHeroState();
+  State<CampaignView> createState() => _CampaignViewState();
 }
 
-class _CampaingViewAddHeroState extends State<CampaingViewAddHero> {
+class _CampaignViewState extends State<CampaignView> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            height: 60,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppProperties.bRadius),
+    return Stack(
+      children: [
+        Column(
+          children: [
+            CampaingTopBar(
+              index: widget.index,
             ),
-            padding: const EdgeInsets.all(5),
-            child: Container(
-              height: 55,
-              width: 140,
-              decoration: BoxDecoration(
-                color: AppProperties.cardColor2,
-                borderRadius: BorderRadius.circular(AppProperties.bRadius),
-              ),
-              child: Center(
-                child: Text(
-                  '${campaigns[widget.campaingIndex].characters.length} Participants',
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            CampaingAddHero(
+              campaignIndex: widget.index,
             ),
-          ),
-          GestureDetector(
-            child: Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppProperties.bRadius)
-              ),
-              child: Icon(
-                Icons.add,
-                color: Colors.black,
-                size: 50,
-              ),
-            ),
+            Expanded(
+                child: HeroesList(
+              campaignIndex: widget.index,
+            ))
+          ],
+        ),
+        Positioned(
+          bottom: 30,
+          right: 20,
+          child: GestureDetector(
             onTap: () {
+              combat.heroes.clear();
+              combat.opponentes.clear();
+              combat.partake.clear();
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Charactercreator(
-                    good: true, 
-                    charIndex: 0, 
-                    campaignIndex: widget.campaingIndex, 
-                    newChar: true
-                  )
-                )
+                  builder: (context) => CombatPrepTeam(
+                    indexCampaign: widget.index,
+                  ),
+                ),
               );
             },
-          )
-        ],
-      ),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: AppProperties.herpPurpleDark,
+                  borderRadius: BorderRadius.circular(AppProperties.bRadius)),
+              height: 50,
+              width: 50,
+              child: const FittedBox(child: Icon(Icons.keyboard_double_arrow_right)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
+class CampaingTopBar extends StatefulWidget {
+  final int index;
 
-class CampaignViewTopBar extends StatefulWidget {
-  const CampaignViewTopBar({super.key});
+  const CampaingTopBar({super.key, required this.index});
 
   @override
-  State<CampaignViewTopBar> createState() => _CampaignViewTopBarState();
+  State<CampaingTopBar> createState() => _CampaingTopBar();
 }
 
-class _CampaignViewTopBarState extends State<CampaignViewTopBar> {
+class _CampaingTopBar extends State<CampaingTopBar> {
+  void exit() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -153,21 +107,17 @@ class _CampaignViewTopBarState extends State<CampaignViewTopBar> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  exit();
                 },
                 child: const Padding(
-                  padding: EdgeInsets.fromLTRB(5,10,10,10),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: AppProperties.heroPurple,
-                    size: 40
-                  ),
+                  padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
+                  child: Icon(Icons.arrow_back, color: Colors.white, size: 40),
                 ),
               ),
               const Text(
-                "Combat Prep",
+                "My Campaigns",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 20,
                 ),
               ),
             ],
@@ -176,10 +126,10 @@ class _CampaignViewTopBarState extends State<CampaignViewTopBar> {
         Container(
           padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
           alignment: Alignment.centerLeft,
-          child: const Text(
-            "Add Heroes",
-            style: TextStyle(
-              fontSize: 20,
+          child: Text(
+            campaigns[widget.index].name,
+            style: const TextStyle(
+              fontSize: 30,
             ),
           ),
         ),
@@ -188,27 +138,76 @@ class _CampaignViewTopBarState extends State<CampaignViewTopBar> {
   }
 }
 
+class CampaingAddHero extends StatefulWidget {
+  final int campaignIndex;
 
-class Campaingview extends StatefulWidget {
-  final int index;
-  const Campaingview({super.key, required this.index});
+  const CampaingAddHero({
+    super.key,
+    required this.campaignIndex,
+  });
 
   @override
-  State<Campaingview> createState() => _CampaingviewState();
+  State<CampaingAddHero> createState() => _CampaingAddHeroState();
 }
 
-class _CampaingviewState extends State<Campaingview> {
+class _CampaingAddHeroState extends State<CampaingAddHero> {
+  void gotToHeroCreation() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Charactercreator(
+                good: true,
+                charIndex: 0,
+                campaignIndex: widget.campaignIndex,
+                newChar: true)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          alignment: Alignment.centerLeft,
+          height: 60,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppProperties.bRadius),
+            color: Colors.white,
+          ),
+          margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: const Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Text(
+              "Add a Hero",
+              style: TextStyle(color: AppProperties.cardColor2, fontSize: 25),
+            ),
+          ),
+        ),
+        onTap: () {
+          gotToHeroCreation();
+        });
+  }
+}
+
+class HeroesList extends StatefulWidget {
+  final int campaignIndex;
+
+  const HeroesList({super.key, required this.campaignIndex});
+
+  @override
+  State<HeroesList> createState() => _HeroesListState();
+}
+
+class _HeroesListState extends State<HeroesList> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Updater>(builder: (context, value, child) {
       return ListView.builder(
         padding: const EdgeInsets.all(8.0),
-        itemCount: campaigns[widget.index].characters.length,
+        itemCount: campaigns[widget.campaignIndex].characters.length,
         itemBuilder: (context, characterIndex) {
-          return CharacterCard(
-            indexCampaing: widget.index,
-            indexCharacter: characterIndex, 
-            index: widget.index,
+          return HeroCard(
+            campaignIndex: widget.campaignIndex,
+            characterIndex: characterIndex,
           );
         },
       );
@@ -216,57 +215,62 @@ class _CampaingviewState extends State<Campaingview> {
   }
 }
 
-class CharacterCard extends StatelessWidget {
-  final int indexCampaing;
-  final int indexCharacter;
-  final int index;
-  const CharacterCard(
-      {super.key, 
-      required this.indexCampaing, 
-      required this.indexCharacter, 
-      required this.index
-      });
+class HeroCard extends StatelessWidget {
+  final int campaignIndex;
+  final int characterIndex;
+
+  const HeroCard({
+    super.key,
+    required this.campaignIndex,
+    required this.characterIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final character = campaigns[indexCampaing].characters[indexCharacter];
+    void goToHeroCreation() {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Charactercreator(
+                    good: true,
+                    charIndex: characterIndex,
+                    campaignIndex: campaignIndex,
+                    newChar: false,
+                  )));
+    }
+
     return SizedBox(
-      height: AppProperties.screenHeight(context)*0.5,
+      height: AppProperties.screenHeight(context) * 0.5,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
         margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Row(
           children: [
             Container(
               decoration: const BoxDecoration(
-                color: AppProperties.heroPurple,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10)
-                )
-              ),
+                  color: AppProperties.heroPurple,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10))),
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10,10,10,0),
-                      child: Icon(
-                        FontAwesomeIcons.shield,
-                        size: 30,
-                      ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: Icon(
+                      FontAwesomeIcons.shield,
+                      size: 30,
                     ),
+                  ),
                   RotatedBox(
                     quarterTurns: 135,
                     child: Text(
-                      "Enemy",
+                      "Hero",
                       style: TextStyle(
-                        fontSize: 20,
-                        color: AppProperties.herpPurpleDark,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 20,
+                          color: AppProperties.herpPurpleDark,
+                          fontWeight: FontWeight.bold),
                     ),
                   )
                 ],
@@ -274,7 +278,7 @@ class CharacterCard extends StatelessWidget {
             ),
             Expanded(
               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
@@ -284,26 +288,26 @@ class CharacterCard extends StatelessWidget {
                         Flexible(
                           flex: 4,
                           child: Text(
-                            character.name,
+                            campaigns[campaignIndex]
+                                .characters[characterIndex]
+                                .name,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 30
-                            ),
+                            style: const TextStyle(fontSize: 30),
                           ),
                         ),
                         Flexible(
                           flex: 1,
                           child: GestureDetector(
-                            child: const Icon(
-                              Icons.remove,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            onTap: () {
-                              campaigns[indexCampaing].characters.removeAt(indexCharacter);
-                              Provider.of<Updater>(context, listen: false).refresh();
-                            }
-                          ),
+                              child: const Icon(
+                                Icons.person,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              onTap: () {
+                                goToHeroCreation();
+                                Provider.of<Updater>(context, listen: false)
+                                    .refresh();
+                              }),
                         )
                       ],
                     ),
@@ -315,34 +319,40 @@ class CharacterCard extends StatelessWidget {
                       children: [
                         Flexible(
                           flex: 1,
-                          child: Text(
-                            character.race,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                            ),
-                        ),
-                          Flexible(
-                          flex: 1,
+                          child: FittedBox(
                             child: Text(
-                            character.characterclass,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
+                              campaigns[campaignIndex]
+                                  .characters[characterIndex]
+                                  .race,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
-                          const Flexible(
+                        ),
+                        Flexible(
                           flex: 1,
-                            child: Text(
+                          child: Text(
+                            campaigns[campaignIndex]
+                                .characters[characterIndex]
+                                .characterclass,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        const Flexible(
+                          flex: 1,
+                          child: Text(
                             "10",
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
                             ),
-                            ),
                           ),
+                        ),
                         Flexible(
                           flex: 1,
                           child: Stack(
@@ -354,11 +364,13 @@ class CharacterCard extends StatelessWidget {
                                 color: AppProperties.heroPurple,
                               ),
                               Text(
-                                character.armorClass.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                )
-                              )
+                                  campaigns[campaignIndex]
+                                      .characters[characterIndex]
+                                      .armorClass
+                                      .toString(),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ))
                             ],
                           ),
                         ),
@@ -370,7 +382,6 @@ class CharacterCard extends StatelessWidget {
             )
           ],
         ),
-        
       ),
     );
   }

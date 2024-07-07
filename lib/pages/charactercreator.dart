@@ -65,7 +65,7 @@ class _CharactercreatorState extends State<Charactercreator> {
   void saveCharacter(
       int charIndex, int campaignIndex, bool newChar, bool good) {
     Character newChar = Character(
-        participate: false,
+        participate: true,
         amount: 0,
         currentInit: 0,
         good: good ? true : false,
@@ -90,6 +90,7 @@ class _CharactercreatorState extends State<Charactercreator> {
           chaProfieciency: chaProf,
           wisProfieciency: wisProf,
         ));
+        newChar.initModifier = toProf(newChar.stats.dex);
 
     if (good == false && newChar == true) {
       chars.add(newChar);
@@ -114,6 +115,7 @@ class _CharactercreatorState extends State<Charactercreator> {
     } else {
       characterTemplate();
     }
+    
     super.initState();
   }
 

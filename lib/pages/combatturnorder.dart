@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:dmhelper/models/mockup.dart';
+import 'package:dmhelper/models/pallete.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CombatTurnOrderPage extends StatelessWidget {
   const CombatTurnOrderPage({super.key});
@@ -72,7 +76,10 @@ class ParticipantsListState extends State<ParticipantsList> {
 
 class ParticipantsCard extends StatefulWidget {
   final int index;
-  const ParticipantsCard({super.key, required this.index});
+  const ParticipantsCard({
+    super.key, 
+    required this.index
+  });
 
   @override
   State<ParticipantsCard> createState() => _ParticipantsCardState();
@@ -80,21 +87,71 @@ class ParticipantsCard extends StatefulWidget {
 
 class _ParticipantsCardState extends State<ParticipantsCard> {
   @override
+
+  @override
+  TextEditingController controller = new TextEditingController();
+  FocusNode focusNode = FocusNode();
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      elevation: 4.0,
-      child: ListTile(
-        tileColor: combat.partake[widget.index].good ? Colors.amber : Colors.green,
-        title: Text(
-          combat.partake[widget.index].name,
-          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-        ),
-        trailing: const Text(
-          "hello",
-          style: TextStyle(fontSize: 16.0),
+    return GestureDetector(
+      child: SizedBox(
+        height: 80,
+        child: Card(
+          color: AppProperties.cardColor2,
+          margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppProperties.bRadius)
+          ),
+          child: Row(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 80,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: combat.partake[widget.index].good ? AppProperties.heroPurple : AppProperties.enemyRed,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(AppProperties.bRadius),
+                        bottomLeft: Radius.circular(AppProperties.bRadius),
+                      )
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: combat.partake[widget.index].good ? const Icon(
+                        FontAwesomeIcons.shield,
+                        size: 35,
+                      ) : const Icon(
+                        FontAwesomeIcons.hammer,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Text(
+                      combat.partake[widget.index].name,
+                      style: const TextStyle(
+                        fontSize: 20,
+                      )
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    child: Text("0"),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
+      onTap: () {
+        
+      }
     );
   }
 }

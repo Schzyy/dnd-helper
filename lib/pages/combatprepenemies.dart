@@ -1,3 +1,4 @@
+import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/pages/combatturnorder.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +13,20 @@ class CombatPrepEnemies extends StatelessWidget {
 
   const CombatPrepEnemies({super.key, required this.indexCampaign});
 
-  void addToCombatHeroes() {
-    for (var char in campaigns[indexCampaign].characters) {
-      if (char.participate) {
-        combat.heroes.add(char);
+  void addEnemiesToCombat() {
+    for( int i = 0; i < chars.length ; i++ ) {
+      Character temp = chars[i];
+      for(int j = 0 ; j < chars[i].amount ; j++) {
+        combat.opponentes.add(temp);
       }
     }
-    for(var char in combat.heroes) {
-      combat.partake.add(char);
+  }
+  void addEnemiesToPartake() {
+    for(int i = 0; i < combat.opponentes.length; i++) {
+      combat.partake.add(combat.opponentes[i]);
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +47,12 @@ class CombatPrepEnemies extends StatelessWidget {
               right: 20,
               child: GestureDetector(
                 onTap: () {
-            },
+                addEnemiesToCombat();
+                addEnemiesToPartake();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CombatTurnOrderPage()));
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppProperties.enemyRed,
@@ -50,11 +60,10 @@ class CombatPrepEnemies extends StatelessWidget {
                   ),
                   height: 50,
                   width: 50,
-                  child: FittedBox(child: Icon(Icons.keyboard_double_arrow_right)),
+                  child: const FittedBox(child: Icon(Icons.keyboard_double_arrow_right)),
                 ),
               ),
             ),
-            
         ],
       ),
     );
@@ -71,6 +80,12 @@ class CombatEnemyViewTopBar extends StatefulWidget {
 class _CombatEnemyViewTopBar extends State<CombatEnemyViewTopBar> {
   @override
   Widget build(BuildContext context) {
+    void emptyEnemies() {
+    combat.opponentes.clear();
+    for(int i = 0; i < chars.length; i++) {
+      chars[i].amount = 0;
+    }
+  }
     return Column(
       children: [
         Container(
@@ -80,6 +95,7 @@ class _CombatEnemyViewTopBar extends State<CombatEnemyViewTopBar> {
             children: [
               GestureDetector(
                 onTap: () {
+                  emptyEnemies();
                   Navigator.pop(context);
                 },
                 child: const Padding(
@@ -104,7 +120,7 @@ class _CombatEnemyViewTopBar extends State<CombatEnemyViewTopBar> {
           padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
           alignment: Alignment.centerLeft,
           child: const Text(
-            "Add Heroes",
+            "Add Enemies",
             style: TextStyle(
               fontSize: 20,
             ),
@@ -124,8 +140,16 @@ class CombatViewAddEnemy extends StatefulWidget {
 }
 
 class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
+  int getAllParticipatingEnemies() {
+    int count = chars.length;
+    for(int i = 0; i < chars.length ; i++) {
+      count += chars[i].amount;
+    }
+    return count;
+  }
   @override
   Widget build(BuildContext context) {
+    return Consumer<Updater>(builder: (context, value, child) {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       width: double.infinity,
@@ -149,7 +173,7 @@ class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
               ),
               child: Center(
                 child: Text(
-                  '${campaigns[widget.campaingIndex].characters.length} Participants',
+                  "${getAllParticipatingEnemies()-1} Enemies",
                   style: const TextStyle(
                     color: Colors.white,
                   ),
@@ -165,7 +189,7 @@ class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(AppProperties.bRadius)
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 color: Colors.black,
                 size: 50,
@@ -188,6 +212,7 @@ class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
         ],
       ),
     );
+  });
   }
 }
 
@@ -205,12 +230,10 @@ class _CombatHeroView extends State<CombatEnemyView> {
     return Consumer<Updater>(builder: (context, value, child) {
       return ListView.builder(
         padding: const EdgeInsets.all(8.0),
-        itemCount: campaigns[widget.index].characters.length,
+        itemCount: chars.length,
         itemBuilder: (context, characterIndex) {
           return CombatEnemyCard(
-            indexCampaing: widget.index,
             indexCharacter: characterIndex, 
-            index: widget.index,
           );
         },
       );
@@ -219,19 +242,14 @@ class _CombatHeroView extends State<CombatEnemyView> {
 }
 
 class CombatEnemyCard extends StatelessWidget {
-  final int indexCampaing;
   final int indexCharacter;
-  final int index;
   const CombatEnemyCard(
-      {super.key, 
-      required this.indexCampaing, 
+      {super.key,  
       required this.indexCharacter, 
-      required this.index
       });
 
   @override
   Widget build(BuildContext context) {
-    final character = campaigns[indexCampaing].characters[indexCharacter];
     return SizedBox(
       height: AppProperties.screenHeight(context)*0.5,
       child: Card(
@@ -285,11 +303,13 @@ class CombatEnemyCard extends StatelessWidget {
                       children: [
                         Flexible(
                           flex: 4,
-                          child: Text(
-                            character.name,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 30
+                          child: FittedBox(
+                            child: Text(
+                              chars[indexCharacter].name,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 30
+                              ),
                             ),
                           ),
                         ),
@@ -302,7 +322,27 @@ class CombatEnemyCard extends StatelessWidget {
                               color: Colors.white,
                             ),
                             onTap: () {
-                              campaigns[indexCampaing].characters.removeAt(indexCharacter);
+                              if(chars[indexCharacter].amount > 0) {
+                                chars[indexCharacter].amount--;
+                              }                             
+                              Provider.of<Updater>(context, listen: false).refresh();
+                            }
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Text(chars[indexCharacter].amount.toString())
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: GestureDetector(
+                            child: const Icon(
+                              Icons.add,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                            onTap: () {
+                              chars[indexCharacter].amount++;
                               Provider.of<Updater>(context, listen: false).refresh();
                             }
                           ),
@@ -318,7 +358,7 @@ class CombatEnemyCard extends StatelessWidget {
                         Flexible(
                           flex: 1,
                           child: Text(
-                            character.race,
+                            chars[indexCharacter].race,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 15,
@@ -328,7 +368,7 @@ class CombatEnemyCard extends StatelessWidget {
                           Flexible(
                           flex: 1,
                             child: Text(
-                            character.characterclass,
+                            chars[indexCharacter].characterclass,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 15,
@@ -340,7 +380,7 @@ class CombatEnemyCard extends StatelessWidget {
                             child: Text(
                             "10",
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
                             ),
                             ),
@@ -356,7 +396,7 @@ class CombatEnemyCard extends StatelessWidget {
                                 color: AppProperties.enemyRed,
                               ),
                               Text(
-                                character.armorClass.toString(),
+                                chars[indexCharacter].armorClass.toString(),
                                 style: const TextStyle(
                                   color: Colors.black,
                                 )

@@ -371,7 +371,9 @@ class _CampaignsListState extends State<CampaignsList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CampaingViewPage(index: index),
+                  builder: (context) => CampaignViewPage(
+                    index: index
+                  ),
                 ),
               );
             },
