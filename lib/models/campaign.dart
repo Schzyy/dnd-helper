@@ -23,6 +23,7 @@ class Campaign {
 
 class Character {
   bool participate;
+  bool dead;
   int amount;
   int initModifier;
   int currentInit;
@@ -46,6 +47,7 @@ class Character {
 
   Character({
     required this.participate,
+    required this.dead,
     required this.amount,
     required this.initModifier,
     required this.currentInit,

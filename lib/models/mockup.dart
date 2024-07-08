@@ -9,6 +9,7 @@ List<Campaign> campaigns = [
     characters: [
       Character(
         participate: true,
+        dead: false,
         amount: 0,
         currentInit: 0,
         initModifier: 4,
@@ -41,6 +42,7 @@ List<Campaign> campaigns = [
       ),
       Character(
         participate: true,
+        dead: false,
         amount: 0,
         currentInit: 0,
         initModifier: 4,
@@ -73,6 +75,7 @@ List<Campaign> campaigns = [
       ),  
     Character(
         participate: false,
+        dead: false,
         amount: 0,
         currentInit: 0,
         initModifier: 4,
@@ -110,6 +113,7 @@ List<Campaign> campaigns = [
     characters: [
       Character(
         participate: false,
+        dead: false,
         amount: 0,
         currentInit: 0,
         initModifier: 4,
@@ -142,6 +146,7 @@ List<Campaign> campaigns = [
       ),
       Character(
         participate: false,
+        dead: false,
         amount: 0,
         currentInit: 0,
         initModifier: 4,
@@ -182,6 +187,7 @@ Combat combat = Combat();
 List<Character> chars = [
   Character(
     participate: false,
+    dead: false,
     amount: 0,
     currentInit: 0,
     initModifier: 4,

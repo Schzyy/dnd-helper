@@ -66,6 +66,7 @@ class _CharactercreatorState extends State<Charactercreator> {
       int charIndex, int campaignIndex, bool newChar, bool good) {
     Character newChar = Character(
         participate: true,
+        dead: false,
         amount: 0,
         currentInit: 0,
         initModifier: toProf(int.parse(dexController.text)),
