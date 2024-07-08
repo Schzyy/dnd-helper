@@ -24,8 +24,7 @@ class Campaign {
 class Character {
   bool participate;
   int amount;
-  int initiative = 0;
-  int initModifier = 0;
+  int initModifier;
   int currentInit;
   bool good;
   String name;
@@ -48,6 +47,7 @@ class Character {
   Character({
     required this.participate,
     required this.amount,
+    required this.initModifier,
     required this.currentInit,
     required this.good,
     required this.name,

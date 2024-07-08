@@ -68,6 +68,7 @@ class _CharactercreatorState extends State<Charactercreator> {
         participate: true,
         amount: 0,
         currentInit: 0,
+        initModifier: toProf(int.parse(dexController.text)),
         good: good ? true : false,
         name: nameController.text,
         race: raceController.text,
