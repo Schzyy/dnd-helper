@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/pallete.dart';
@@ -30,21 +32,50 @@ class Combat extends StatefulWidget {
 class _CombatState extends State<Combat> {
   List<Character> dialogChars = [];
   int count = 1;
+  late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
+    sortByInit();
     dialogChars.add(combat.partake[0]);
-  }
+    scrollController = ScrollController();
 
+  }
+void sortByInit() {
+  int n = combat.partake.length;
+  for (int i = 0; i < n - 1; i++) {
+    for (int j = 0; j < n - i - 1; j++) {
+      if (combat.partake[j].currentInit < combat.partake[j + 1].currentInit ||
+          (combat.partake[j].currentInit == combat.partake[j + 1].currentInit &&
+              combat.partake[j].initModifier < combat.partake[j + 1].initModifier)) {
+        Character temp = combat.partake[j];
+        combat.partake[j] = combat.partake[j + 1];
+        combat.partake[j + 1] = temp;
+      }
+    }
+  }
+}
   void goNext() {
     setState(() {
       if (combat.partake[count % combat.partake.length].dead == false) {
         dialogChars.add(combat.partake[count % combat.partake.length]);
       }
       count++;
+      scrollToBottom();
     });
     Provider.of<Updater>(context, listen: false).refresh();
+  }
+  void scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+          scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   @override
@@ -56,6 +87,8 @@ class _CombatState extends State<Combat> {
           Expanded(
             child: CombatDialog(
               dialogChars: dialogChars,
+              goNext: scrollToBottom,
+              scrollController: scrollController
             ),
           ),
           CombatAdvance(
@@ -106,11 +139,15 @@ class _CombatTopBarState extends State<CombatTopBar> {
 }
 
 class CombatDialog extends StatefulWidget {
+  final Function goNext;
+  final ScrollController scrollController;
+
   const CombatDialog({
     super.key,
-    required this.dialogChars,
+    required this.dialogChars, 
+    required this.goNext,
+    required this.scrollController
   });
-
   final List<Character> dialogChars;
 
   @override
@@ -118,23 +155,8 @@ class CombatDialog extends StatefulWidget {
 }
 
 class _CombatDialogState extends State<CombatDialog> {
-  late ScrollController scrollController;
+  
   @override
-  initState() {
-    super.initState();
-    scrollController = ScrollController();
-  }
-  void scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (scrollController.hasClients) {
-          scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
   Widget build(BuildContext context) {
     return Consumer<Updater>(
       builder: (context, value, child) {
@@ -147,9 +169,8 @@ class _CombatDialogState extends State<CombatDialog> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: widget.dialogChars.length - 1,
-                  controller: scrollController,
+                  controller: widget.scrollController,
                   itemBuilder: (context, index) {
-                    scrollToBottom();
                     return ParticipantCard(
                       displayChar: widget.dialogChars[index],
                     );

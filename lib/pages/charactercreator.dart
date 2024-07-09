@@ -63,7 +63,7 @@ class _CharactercreatorState extends State<Charactercreator> {
   bool chaProf = false;
 
   void saveCharacter(
-      int charIndex, int campaignIndex, bool newChar, bool good) {
+      int charIndex, int campaignIndex, bool newCharacter, bool good) {
     Character newChar = Character(
         participate: true,
         dead: false,
@@ -94,16 +94,16 @@ class _CharactercreatorState extends State<Charactercreator> {
         ));
         newChar.initModifier = toProf(newChar.stats.dex);
 
-    if (good == false && newChar == true) {
+    if (good == false && newCharacter == true) {
       chars.add(newChar);
     }
-    if (good == false && newChar == false) {
+    if (good == false && newCharacter == false) {
       chars[charIndex] = newChar;
     }
-    if (good == true && newChar == false) {
+    if (good == true && newCharacter == false) {
       campaigns[campaignIndex].characters[charIndex] = newChar;
     }
-    if (good == true && newChar == true) {
+    if (good == true && newCharacter == true) {
       campaigns[campaignIndex].characters.add(newChar);
     }
     Navigator.pop(context);
@@ -121,13 +121,15 @@ class _CharactercreatorState extends State<Charactercreator> {
     super.initState();
   }
 
-  int toProf(int i) {
-    i = i - 10;
-    double iTwo = i.toDouble();
-    iTwo = iTwo / 2;
-    i = iTwo.toInt();
-    return i;
-  }
+    int toProf(int i) {
+  i = i - 10;
+  double iTwo = i.toDouble();
+  iTwo = iTwo / 2;
+  i = iTwo.floor(); // Use floor to get the correct integer part
+  return i;
+}
+
+
 
   int returnProf(int i) {
     double iTwo = 1 + (i * 0.25);
@@ -222,39 +224,10 @@ class _CharactercreatorState extends State<Charactercreator> {
                   Flexible(
                     flex: 3,
                     child: Container(
-                      margin: const EdgeInsets.fromLTRB(10, 30, 0, 0),
-                      height: 60,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(AppProperties.bRadius),
-                        color: AppProperties.enemyRedDark,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(AppProperties.bRadius),
-                            color: AppProperties.enemyRed,
-                          ),
-                          child: const Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.spaghettiMonsterFlying,
-                                size: 35,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                child: Text(
-                                  "Enemy",
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        border: Border.all(
+                          color: AppProperties.allyYellow
+                        )
                       ),
                     ),
                   ),
@@ -550,7 +523,7 @@ class _CharactercreatorState extends State<Charactercreator> {
                                           ),
                                         )
                                       : Text(
-                                          "${conController.text}     + ${toProf(int.parse(intController.text))}"),
+                                          "${conController.text}     + ${toProf(int.parse(conController.text))}"),
                                 )
                               ],
                             ),

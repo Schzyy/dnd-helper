@@ -3,7 +3,6 @@ import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
-import 'package:dmhelper/pages/characterview.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -49,38 +48,37 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+      margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 30, 10, 0),
-            child: Text(
-              "My Characters",
+          const Text(
+              "MY CHARACTERS",
               style: TextStyle(
                 fontSize: 30,
-                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 5, 0),
+          GestureDetector(
+            onTap: () {
+              _navigateAndRefresh(
+                context,
+              );
+            },
             child: Container(
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(AppProperties.bRadius),
                 color: Colors.white,
               ),
-              height: 40,
-              width: 40,
-              child: GestureDetector(
                 child: const Icon(
                   Icons.add,
-                  size: 40,
-                ),
-                onTap: () {
-                  _navigateAndRefresh(context);
-                },
-              ),
+                  weight: 10,
+                  size: 60,
+                  color: AppProperties.screenColor,
+                  ),
             ),
           )
         ],
@@ -109,41 +107,41 @@ class TemplateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: AppProperties.screenHeight(context)*0.5,
+      height: 160,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
         margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             Container(
               decoration: const BoxDecoration(
-                color: AppProperties.enemyRed,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10)
-                )
-              ),
+                  color: AppProperties.enemyRed,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20))),
               child: const Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10,10,10,0),
-                      child: Icon(
-                        FontAwesomeIcons.hammer,
-                        size: 30,
-                      ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 22, 10, 0),
+                    child: Icon(
+                      FontAwesomeIcons.shieldHalved,
+                      color: AppProperties.enemyRedDark,
+                      size: 25,
                     ),
-                  RotatedBox(
-                    quarterTurns: 135,
-                    child: Text(
-                      "Enemy",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: AppProperties.enemyRedDark,
-                        fontWeight: FontWeight.bold
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,0,0,10),
+                    child: RotatedBox(
+                      quarterTurns: 135,
+                      child: Text(
+                        "enemy",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: AppProperties.enemyRedDark,
+                            fontWeight: FontWeight.w600,
+                          ),
                       ),
                     ),
                   )
@@ -152,37 +150,35 @@ class TemplateCard extends StatelessWidget {
             ),
             Expanded(
               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                    padding: const EdgeInsets.fromLTRB(15.0, 17.5, 15.0, 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
                           flex: 4,
                           child: Text(
-                            name,
+                            chars[index].name,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 30
-                            ),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600
+                              ),
                           ),
                         ),
                         Flexible(
                           flex: 1,
                           child: GestureDetector(
-                            child: const Icon(
-                              Icons.remove,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            onTap: () {
-                              
-                              chars.removeAt(index);
-                              Provider.of<Updater>(context, listen: false).refresh();
-                            }
-                          ),
+                              child: const Icon(
+                                Icons.person,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              onTap: () {
+                                Provider.of<Updater>(context, listen: false).refresh();
+                              }),
                         )
                       ],
                     ),
@@ -192,55 +188,62 @@ class TemplateCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            rasse,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
+                        Row(
+                          children: [
+                            FittedBox(
+                            child: Text(
+                              chars[index]
+                                  .race,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: Text(
+                              chars[index].characterclass,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
+                          ),
+                          ],
                         ),
-                          Flexible(
-                          flex: 1,
+                        Row(
+                          children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0,0,10,0),
                             child: Text(
-                            characterclass,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
+                              "+${chars[index].initModifier}",
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
-                          Flexible(
-                          flex: 1,
-                            child: Text(
-                            "+ $init",
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                            ),
-                          ),
-                        Flexible(
-                          flex: 1,
-                          child: Stack(
+                          Stack(
                             alignment: Alignment.center,
                             children: [
                               const Icon(
                                 FontAwesomeIcons.shield,
-                                size: 35,
+                                size: 30,
                                 color: AppProperties.enemyRed,
                               ),
                               Text(
-                                "$armorclass",
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                )
-                              )
+                                  chars[index].armorClass.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppProperties.cardColor,
+                                  ))
                             ],
                           ),
-                        ),
+                          ],
+                        )
+
                       ],
                     ),
                   )
@@ -249,7 +252,6 @@ class TemplateCard extends StatelessWidget {
             )
           ],
         ),
-        
       ),
     );
   }
@@ -275,7 +277,13 @@ class _TemplatesDisplayState extends State<TemplatesDisplay> {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CharacterPage(char: chars[index]))),
+                    builder: (context) => Charactercreator(
+                      campaignIndex: 0,
+                      charIndex: index,
+                      good: false,
+                      newChar: false,
+                      existingChar: chars[index],
+                    ))),
             child: TemplateCard(
               name: chars[index].name,
               rasse: chars[index].race,

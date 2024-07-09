@@ -56,13 +56,16 @@ class CombatPrepTeam extends StatelessWidget {
                 );
               },
               child: Container(
-                decoration: BoxDecoration(
-                    color: AppProperties.herpPurpleDark,
-                    borderRadius: BorderRadius.circular(AppProperties.bRadius)),
-                height: 50,
-                width: 50,
-                child: const FittedBox(
-                    child: Icon(Icons.keyboard_double_arrow_right)),
+              decoration: BoxDecoration(
+                  color: AppProperties.enemyRed,
+                  borderRadius: BorderRadius.circular(AppProperties.bRadius*3)),
+              height: 60,
+              width: 60,
+              child: const Icon(
+                Icons.arrow_forward,
+                color: Colors.white,
+                size: 40,
+              ),
               ),
             ),
           ),
@@ -105,19 +108,19 @@ class _CombatHeroesViewTopBar extends State<CombatHeroesViewTopBar> {
                 ),
               ),
               const Text(
-                "Combat Prep",
+                "COMBAT PREP",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 18,
                 ),
               ),
             ],
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(50, 0, 0, 0),
           alignment: Alignment.centerLeft,
           child: const Text(
-            "Add Enemies",
+            "ADD HEROES",
             style: TextStyle(
               fontSize: 20,
             ),
@@ -187,30 +190,6 @@ class _CombatViewAddHero extends State<CombatViewAddHero> {
               ),
             ),
           ),
-          GestureDetector(
-            child: Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppProperties.bRadius)),
-              child: const Icon(
-                Icons.add,
-                color: Colors.black,
-                size: 50,
-              ),
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Charactercreator(
-                          good: true,
-                          charIndex: 0,
-                          campaignIndex: widget.campaingIndex,
-                          newChar: true)));
-            },
-          )
         ],
       ),
     );
@@ -265,45 +244,54 @@ class _CombatCharacterCardState extends State<CombatCharacterCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: AppProperties.screenHeight(context) * 0.5,
-      child: Opacity(
-        opacity: campaigns[widget.indexCampaing]
-                .characters[widget.indexCharacter]
-                .participate
-            ? 1.0
-            : 0.4,
-        child: Card(
+    return GestureDetector(
+      onTap: () {
+        campaigns[widget.indexCampaing].characters[widget.indexCharacter].participate = !campaigns[widget.indexCampaing].characters[widget.indexCharacter].participate;
+        Provider.of<Updater>(context, listen: false).refresh();                        
+      },
+      child: SizedBox(
+        height: 160,
+        child: Opacity(
+          opacity: campaigns[widget.indexCampaing]
+                  .characters[widget.indexCharacter]
+                  .participate
+              ? 1.0
+              : 0.4,
+          child: Card(
           color: const Color.fromARGB(255, 55, 55, 55),
           margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Row(
             children: [
               Container(
                 decoration: const BoxDecoration(
                     color: AppProperties.heroPurple,
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10))),
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20))),
                 child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      padding: EdgeInsets.fromLTRB(10, 22, 10, 0),
                       child: Icon(
-                        FontAwesomeIcons.shield,
-                        size: 30,
+                        FontAwesomeIcons.shieldHalved,
+                        color: AppProperties.herpPurpleDark,
+                        size: 25,
                       ),
                     ),
-                    RotatedBox(
-                      quarterTurns: 135,
-                      child: Text(
-                        "Enemy",
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: AppProperties.herpPurpleDark,
-                            fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0,0,0,10),
+                      child: RotatedBox(
+                        quarterTurns: 135,
+                        child: Text(
+                          "hero",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: AppProperties.herpPurpleDark,
+                              fontWeight: FontWeight.w600,
+                            ),
+                        ),
                       ),
                     )
                   ],
@@ -314,7 +302,7 @@ class _CombatCharacterCardState extends State<CombatCharacterCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                      padding: const EdgeInsets.fromLTRB(15.0, 17.5, 15.0, 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -325,31 +313,20 @@ class _CombatCharacterCardState extends State<CombatCharacterCard> {
                                   .characters[widget.indexCharacter]
                                   .name,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 30),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600
+                                ),
                             ),
                           ),
                           Flexible(
                             flex: 1,
-                            child: GestureDetector(
                                 child: Icon(
                                   campaigns[widget.indexCampaing]
-                                          .characters[widget.indexCharacter]
-                                          .participate
-                                      ? Icons.remove
-                                      : Icons.add,
+                                  .characters[widget.indexCharacter].participate ? Icons.add : Icons.remove,
                                   size: 30,
                                   color: Colors.white,
                                 ),
-                                onTap: () {
-                                  campaigns[widget.indexCampaing]
-                                          .characters[widget.indexCharacter]
-                                          .participate =
-                                      !campaigns[widget.indexCampaing]
-                                          .characters[widget.indexCharacter]
-                                          .participate;
-                                  Provider.of<Updater>(context, listen: false)
-                                      .refresh();
-                                }),
                           )
                         ],
                       ),
@@ -359,61 +336,68 @@ class _CombatCharacterCardState extends State<CombatCharacterCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Flexible(
-                            flex: 1,
-                            child: Text(
-                              campaigns[widget.indexCampaing]
+                          Row(
+                            children: [
+                              FittedBox(
+                              child: Text(
+                                campaigns[widget.indexCampaing]
                                   .characters[widget.indexCharacter]
                                   .race,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 15,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Text(
-                              campaigns[widget.indexCampaing]
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                              child: Text(
+                                campaigns[widget.indexCampaing]
                                   .characters[widget.indexCharacter]
                                   .characterclass,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 15,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
+                            ],
                           ),
-                          const Flexible(
-                            flex: 1,
-                            child: Text(
-                              "10",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 15,
+                          Row(
+                            children: [
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0,0,10,0),
+                              child: Text(
+                                "10",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Stack(
+                            Stack(
                               alignment: Alignment.center,
                               children: [
                                 const Icon(
                                   FontAwesomeIcons.shield,
-                                  size: 35,
+                                  size: 30,
                                   color: AppProperties.heroPurple,
                                 ),
                                 Text(
                                     campaigns[widget.indexCampaing]
-                                        .characters[widget.indexCharacter]
-                                        .armorClass
+                                  .characters[widget.indexCharacter]
+                                  .armorClass
                                         .toString(),
                                     style: const TextStyle(
-                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppProperties.cardColor,
                                     ))
                               ],
                             ),
-                          ),
+                            ],
+                          )
+      
                         ],
                       ),
                     )
@@ -423,6 +407,7 @@ class _CombatCharacterCardState extends State<CombatCharacterCard> {
             ],
           ),
         ),
+      )
       ),
     );
   }

@@ -32,23 +32,54 @@ class CombatTurnOrderPage extends StatelessWidget {
           Positioned(
             bottom: 30,
             right: 20,
-              child: ElevatedButton(
-                onPressed: () {
-                  rollCharacters();
-                  Navigator.push(
-                    context,
-                      MaterialPageRoute(
-                        builder: (context) => const CombatPage(
-                      )
-                    ),
-                  );
-                }, 
-                child: Icon(
-                  FontAwesomeIcons.fire,
-                  color: AppProperties.enemyRed
-                )
+            child: GestureDetector(
+              onTap: () {
+                rollCharacters();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const CombatPage(),
+                  ),
+                );
+              },
+              child: Container(
+              decoration: BoxDecoration(
+                  color: AppProperties.enemyRed,
+                  borderRadius: BorderRadius.circular(AppProperties.bRadius*3)),
+              height: 60,
+              width: 60,
+              child: const Icon(
+                FontAwesomeIcons.fire,
+                color: Colors.white,
+                size: 40,
               ),
-            )
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 30,
+            left: 20,
+            child: GestureDetector(
+              onTap: () {
+                combat.opponentes.clear();
+                combat.partake.clear();
+                Navigator.pop(context);
+              },
+              child: Container(
+              decoration: BoxDecoration(
+                  color: AppProperties.enemyRed,
+                  borderRadius: BorderRadius.circular(AppProperties.bRadius*3)),
+              height: 60,
+              width: 60,
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: 40,
+              ),
+              ),
+            ),
+          ),
         ] 
       ),
     );
@@ -228,6 +259,7 @@ class _ParticipantsCardState extends State<ParticipantsCard> {
                             ),
                           )
                           : TextField(
+                              keyboardType: TextInputType.number,
                               textAlign: TextAlign.end,
                               controller: controller,
                               focusNode: FocusNode(),

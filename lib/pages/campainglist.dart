@@ -1,11 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:dmhelper/models/campaign.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/campaingview.dart';
 import 'package:dmhelper/pages/templates.dart';
 import 'package:dmhelper/models/mockup.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:dmhelper/models/pallete.dart';
 
@@ -55,10 +55,14 @@ class _HomeState extends State<Home> {
     const TemplatePage(),
     const CampaignSelector(),
   ];
-
+  bool swap = true;
   void onTabTapped(int index) {
     setState(() {
+      if(index != currentPageIndex) {
+        swap = !swap;
+      }
       currentPageIndex = index;
+
     });
   }
 
@@ -72,13 +76,17 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color.fromARGB(255, 55, 55, 55),
         currentIndex: currentPageIndex,
         onTap: onTabTapped,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: Icon(
+              FontAwesomeIcons.spaghettiMonsterFlying,
+              color: swap ? AppProperties.cardColor : Colors.white,
+            ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: Icon(FontAwesomeIcons.shieldHalved,
+            color: swap ?  Colors.white : AppProperties.cardColor),
             label: '',
           ),
         ],
@@ -198,45 +206,37 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+      margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 10, 0),
-            child: SizedBox(
-              width: AppProperties.screenWidth(context)*0.6,
-              child: FittedBox(
-                child: Text(
-                  "My Campaigns",
-                  style: TextStyle(
-                    fontSize: AppProperties.screenWidth(context)*0.15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+          const Text("MY CAMPAIGNS",
+          style: TextStyle(
+            fontSize: 30
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 5, 0),
+          
+          ),
+          GestureDetector(
+            onTap: () {
+              goToCampaignCreation();
+            },
             child: Container(
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppProperties.bRadius),
-                color: Colors.white
+                color: Colors.white,
               ),
-              height: AppProperties.screenHeight(context)*0.15,
-              width: AppProperties.screenWidth(context)*0.15,
-              child: GestureDetector(
                 child: const Icon(
                   Icons.add,
-                  size: 30,
-                ),
-                onTap: () {
-                  goToCampaignCreation();
-                },
-              ),
+                  weight: 10,
+                  size: 60,
+                  color: AppProperties.screenColor,
+                  ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -272,7 +272,7 @@ class CampaignOverviewCard extends StatelessWidget {
     ];
 
     return SizedBox(
-      height: AppProperties.screenHeight(context)*0.5,
+      height: 160,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
         margin: const EdgeInsets.fromLTRB(10,10,10,5),
@@ -295,10 +295,15 @@ class CampaignOverviewCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0,5.0,15.0,5),
-                    child: Icon(
-                      Icons.door_sliding,
-                      size: 40,
-                      color: rotatingColorFont[index%3],
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      child: SvgPicture.asset(
+                        'assets/campaignsIcon.svg',
+                        width: 30,
+                        height: 30,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   Padding(

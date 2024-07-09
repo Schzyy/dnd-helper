@@ -61,6 +61,23 @@ class Character {
     required this.hp,
     required this.stats,
   });
+
+  // Copy constructor
+  Character.copy(Character from)
+      : participate = from.participate,
+        dead = from.dead,
+        amount = from.amount,
+        initModifier = from.initModifier,
+        currentInit = from.currentInit,
+        good = from.good,
+        name = from.name,
+        level = from.level,
+        race = from.race,
+        characterclass = from.characterclass,
+        armorClass = from.armorClass,
+        walkingspeed = from.walkingspeed,
+        hp = Hp.copy(from.hp),
+        stats = Stats.copy(from.stats);
 }
 
 class Hp {
@@ -73,6 +90,12 @@ class Hp {
     this.currentHp,
     this.tempHp,
   });
+
+  // Copy constructor
+  Hp.copy(Hp from)
+      : maxHp = from.maxHp,
+        currentHp = from.currentHp,
+        tempHp = from.tempHp;
 }
 
 class Stats {
@@ -89,29 +112,7 @@ class Stats {
   int cha;
   bool chaProfieciency;
 
-  void changePrfStr(String prf) {
-    if(prf == "str") {
-      strProfieciency = !strProfieciency;
-    }
-    if(prf == "dex") {
-      dexProfieciency = !dexProfieciency;
-    }
-    if(prf == "con") {
-      conProfieciency = !conProfieciency;
-    }
-    if(prf == "int") {
-      intProfieciency = !intProfieciency;
-    }
-    if(prf == "wis") {
-      wisProfieciency = !wisProfieciency;
-    }
-    if(prf == "cha") {
-      chaProfieciency = !chaProfieciency;
-    }
-  }
-  
-
-  Stats( {
+  Stats({
     required this.str,
     required this.strProfieciency,
     required this.dex,
@@ -125,7 +126,23 @@ class Stats {
     required this.cha,
     required this.chaProfieciency,
   });
+
+  // Copy constructor
+  Stats.copy(Stats from)
+      : str = from.str,
+        strProfieciency = from.strProfieciency,
+        dex = from.dex,
+        dexProfieciency = from.dexProfieciency,
+        con = from.con,
+        conProfieciency = from.conProfieciency,
+        inte = from.inte,
+        intProfieciency = from.intProfieciency,
+        wis = from.wis,
+        wisProfieciency = from.wisProfieciency,
+        cha = from.cha,
+        chaProfieciency = from.chaProfieciency;
 }
+
 
 class Combat {
   List<Character> partake = [];

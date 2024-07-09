@@ -14,19 +14,25 @@ class CombatPrepEnemies extends StatelessWidget {
   const CombatPrepEnemies({super.key, required this.indexCampaign});
 
   void addEnemiesToCombat() {
-    for( int i = 0; i < chars.length ; i++ ) {
-      Character temp = chars[i];
-      for(int j = 0 ; j < chars[i].amount ; j++) {
-        combat.opponentes.add(temp);
-      }
+  for (int i = 0; i < chars.length; i++) {
+    Character original = chars[i];
+    for (int j = 0; j < original.amount; j++) {
+      combat.opponentes.add(Character.copy(original));
     }
   }
-  void addEnemiesToPartake() {
-    for(int i = 0; i < combat.opponentes.length; i++) {
-      combat.partake.add(combat.opponentes[i]);
+}
+
+void addEnemiesToPartake() {
+  for (int i = 0; i < combat.opponentes.length; i++) {
+    Character original = combat.opponentes[i];
+    Character temp = Character.copy(original);
+    if (i > 0) {
+      temp.name = "${temp.name} $i";
     }
+    combat.partake.add(temp);
   }
-  
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +50,30 @@ class CombatPrepEnemies extends StatelessWidget {
           ),
           Positioned(
               bottom: 30,
+              left: 20,
+              child: GestureDetector(
+                onTap: () {
+                  combat.partake.clear();
+                  combat.heroes.clear();
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppProperties.enemyRed,
+                    borderRadius: BorderRadius.circular(AppProperties.bRadius*3)
+                  ),
+                  height: 60,
+                  width: 60,
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 40
+                    )
+                  ),
+                ),
+              ),
+          Positioned(
+              bottom: 30,
               right: 20,
               child: GestureDetector(
                 onTap: () {
@@ -56,14 +86,18 @@ class CombatPrepEnemies extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppProperties.enemyRed,
-                    borderRadius: BorderRadius.circular(AppProperties.bRadius)
+                    borderRadius: BorderRadius.circular(AppProperties.bRadius*3)
                   ),
-                  height: 50,
-                  width: 50,
-                  child: const FittedBox(child: Icon(Icons.keyboard_double_arrow_right)),
+                  height: 60,
+                  width: 60,
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    size: 40,
+                    color: Colors.white,
+                    )
+                  ),
                 ),
               ),
-            ),
         ],
       ),
     );
@@ -90,27 +124,18 @@ class _CombatEnemyViewTopBar extends State<CombatEnemyViewTopBar> {
       children: [
         Container(
           margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              GestureDetector(
-                onTap: () {
-                  emptyEnemies();
-                  Navigator.pop(context);
-                },
-                child: const Padding(
+              Padding(
                   padding: EdgeInsets.fromLTRB(5,10,10,10),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: AppProperties.enemyRed,
-                    size: 40
+                child: Text(
+                  "COMBAT PREP",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: AppProperties.cardColor3,
+                    fontWeight: FontWeight.w600
                   ),
-                ),
-              ),
-              const Text(
-                "Combat Prep",
-                style: TextStyle(
-                  fontSize: 30,
                 ),
               ),
             ],
@@ -176,39 +201,13 @@ class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
                   "${getAllParticipatingEnemies()-1} Enemies",
                   style: const TextStyle(
                     color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600
                   ),
                 ),
               ),
             ),
           ),
-          GestureDetector(
-            child: Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(AppProperties.bRadius)
-              ),
-              child: const Icon(
-                Icons.add,
-                color: Colors.black,
-                size: 50,
-              ),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Charactercreator(
-                    good: true, 
-                    charIndex: 0, 
-                    campaignIndex: widget.campaingIndex, 
-                    newChar: true
-                  )
-                )
-              );
-            },
-          )
         ],
       ),
     );
@@ -251,44 +250,33 @@ class CombatEnemyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: AppProperties.screenHeight(context)*0.5,
+      height: 110,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
-        margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+        margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
+          borderRadius: BorderRadius.circular(AppProperties.cardRadius)
         ),
         child: Row(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppProperties.enemyRed,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10)
+                  topLeft: Radius.circular(AppProperties.cardRadius),
+                  bottomLeft: Radius.circular(AppProperties.cardRadius)
                 )
               ),
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(10,10,10,0),
+                      padding: EdgeInsets.fromLTRB(10,10,10,10),
                       child: Icon(
                         FontAwesomeIcons.shield,
                         size: 30,
                       ),
                     ),
-                  RotatedBox(
-                    quarterTurns: 135,
-                    child: Text(
-                      "Enemy",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: AppProperties.enemyRedDark,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
@@ -308,7 +296,7 @@ class CombatEnemyCard extends StatelessWidget {
                               chars[indexCharacter].name,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 30
+                                fontSize: 20
                               ),
                             ),
                           ),
@@ -331,7 +319,11 @@ class CombatEnemyCard extends StatelessWidget {
                         ),
                         Flexible(
                           flex: 1,
-                          child: Text(chars[indexCharacter].amount.toString())
+                          child: Text(chars[indexCharacter].amount.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600
+                          ),
+                          )
                         ),
                         Flexible(
                           flex: 1,
@@ -353,57 +345,26 @@ class CombatEnemyCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Flexible(
-                          flex: 1,
-                          child: Text(
+                          Text(
                             chars[indexCharacter].race,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 15,
+                              fontSize: 10,
                             ),
                             ),
-                        ),
-                          Flexible(
-                          flex: 1,
-                            child: Text(
-                            chars[indexCharacter].characterclass,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                            ),
-                          ),
-                          const Flexible(
-                          flex: 1,
-                            child: Text(
-                            "10",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                            ),
-                          ),
-                        Flexible(
-                          flex: 1,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.shield,
-                                size: 35,
-                                color: AppProperties.enemyRed,
+
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                              child: Text(
+                              chars[indexCharacter].characterclass,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 10,
                               ),
-                              Text(
-                                chars[indexCharacter].armorClass.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                )
-                              )
-                            ],
-                          ),
-                        ),
+                              ),
+                            ),
                       ],
                     ),
                   )

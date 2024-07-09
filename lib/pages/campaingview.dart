@@ -69,14 +69,18 @@ class _CampaignViewState extends State<CampaignView> {
             },
             child: Container(
               decoration: BoxDecoration(
-                  color: AppProperties.herpPurpleDark,
-                  borderRadius: BorderRadius.circular(AppProperties.bRadius)),
-              height: 50,
-              width: 50,
-              child: const FittedBox(child: Icon(Icons.keyboard_double_arrow_right)),
+                  color: AppProperties.enemyRed,
+                  borderRadius: BorderRadius.circular(AppProperties.bRadius*3)),
+              height: 60,
+              width: 60,
+              child: const Icon(
+                FontAwesomeIcons.fire,
+                color: Colors.white,
+                size: 40,
+              )
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -98,42 +102,50 @@ class _CampaingTopBar extends State<CampaingTopBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  exit();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
-                  child: Icon(Icons.arrow_back, color: Colors.white, size: 40),
+    return Container(
+      margin: const EdgeInsets.fromLTRB(15, 40, 15, 0),
+      child: Column(
+        children: [
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    exit();
+                  },
+                  child: Container(
+                    width: 50,
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
+                      child: Icon(Icons.arrow_back, color: AppProperties.cardColor3, size: 30),
+                    ),
+                  ),
                 ),
-              ),
-              const Text(
-                "My Campaigns",
-                style: TextStyle(
-                  fontSize: 20,
+                const Text(
+                  "MY CAMPAIGNS",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: AppProperties.cardColor3,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: Text(
-            campaigns[widget.index].name,
-            style: const TextStyle(
-              fontSize: 30,
+              ],
             ),
           ),
-        ),
-      ],
+          Container(
+            padding: const EdgeInsets.fromLTRB(50, 0, 0, 20),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              campaigns[widget.index].name,
+              style: const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -159,26 +171,34 @@ class _CampaingAddHeroState extends State<CampaingAddHero> {
                 good: true,
                 charIndex: 0,
                 campaignIndex: widget.campaignIndex,
-                newChar: true)));
+                newChar: true
+              )));
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        child: Container(
+        child: Align(
           alignment: Alignment.centerLeft,
-          height: 60,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppProperties.bRadius),
-            color: Colors.white,
-          ),
-          margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-          child: const Padding(
+          child: Container(
             padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: Text(
-              "Add a Hero",
-              style: TextStyle(color: AppProperties.cardColor2, fontSize: 25),
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: AppProperties.screenWidth(context) > 450 ? 400 : double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppProperties.cardRadius-5),
+              color: Colors.white,
+            ),
+            margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: const Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Text(
+                "Add a Hero",
+                style: TextStyle(color: AppProperties.cardColor, 
+                fontSize: 20,
+                fontWeight: FontWeight.w600
+                ),
+              ),
             ),
           ),
         ),
@@ -235,42 +255,48 @@ class HeroCard extends StatelessWidget {
                     good: true,
                     charIndex: characterIndex,
                     campaignIndex: campaignIndex,
+                    existingChar: campaigns[campaignIndex].characters[characterIndex],
                     newChar: false,
                   )));
     }
 
     return SizedBox(
-      height: AppProperties.screenHeight(context) * 0.5,
+      height: 160,
       child: Card(
         color: const Color.fromARGB(255, 55, 55, 55),
         margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             Container(
               decoration: const BoxDecoration(
                   color: AppProperties.heroPurple,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomLeft: Radius.circular(10))),
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20))),
               child: const Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    padding: EdgeInsets.fromLTRB(10, 22, 10, 0),
                     child: Icon(
-                      FontAwesomeIcons.shield,
-                      size: 30,
+                      FontAwesomeIcons.shieldHalved,
+                      color: AppProperties.herpPurpleDark,
+                      size: 25,
                     ),
                   ),
-                  RotatedBox(
-                    quarterTurns: 135,
-                    child: Text(
-                      "Hero",
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: AppProperties.herpPurpleDark,
-                          fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0,0,0,10),
+                    child: RotatedBox(
+                      quarterTurns: 135,
+                      child: Text(
+                        "hero",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: AppProperties.herpPurpleDark,
+                            fontWeight: FontWeight.w600,
+                          ),
+                      ),
                     ),
                   )
                 ],
@@ -281,7 +307,7 @@ class HeroCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                    padding: const EdgeInsets.fromLTRB(15.0, 17.5, 15.0, 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -292,7 +318,10 @@ class HeroCard extends StatelessWidget {
                                 .characters[characterIndex]
                                 .name,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 30),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600
+                              ),
                           ),
                         ),
                         Flexible(
@@ -305,8 +334,7 @@ class HeroCard extends StatelessWidget {
                               ),
                               onTap: () {
                                 goToHeroCreation();
-                                Provider.of<Updater>(context, listen: false)
-                                    .refresh();
+                                Provider.of<Updater>(context, listen: false).refresh();
                               }),
                         )
                       ],
@@ -317,9 +345,9 @@ class HeroCard extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
-                          flex: 1,
-                          child: FittedBox(
+                        Row(
+                          children: [
+                            FittedBox(
                             child: Text(
                               campaigns[campaignIndex]
                                   .characters[characterIndex]
@@ -330,37 +358,38 @@ class HeroCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            campaigns[campaignIndex]
-                                .characters[characterIndex]
-                                .characterclass,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: Text(
+                              campaigns[campaignIndex]
+                                  .characters[characterIndex]
+                                  .characterclass,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
+                          ],
                         ),
-                        const Flexible(
-                          flex: 1,
-                          child: Text(
-                            "10",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 15,
+                        Row(
+                          children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(0,0,10,0),
+                            child: Text(
+                              "10",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Stack(
+                          Stack(
                             alignment: Alignment.center,
                             children: [
                               const Icon(
                                 FontAwesomeIcons.shield,
-                                size: 35,
+                                size: 30,
                                 color: AppProperties.heroPurple,
                               ),
                               Text(
@@ -369,11 +398,15 @@ class HeroCard extends StatelessWidget {
                                       .armorClass
                                       .toString(),
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppProperties.cardColor,
                                   ))
                             ],
                           ),
-                        ),
+                          ],
+                        )
+
                       ],
                     ),
                   )

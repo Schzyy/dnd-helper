@@ -9,8 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^6.0.0
-  font_awesome_flutter: ^10.1.0
+  provider: 
+  font_awesome_flutter: 
+  flutter_svg: 
 
 dev_dependencies:
   flutter_test:
@@ -23,8 +24,9 @@ flutter:
   fonts:
     - family: Space
       fonts:
-        - asset: lib/assets/Space_Grotesk_Font/SpaceGrotesk-Regular.ttf
-    - family: DmHelper
-      fonts:
-        - asset: lib/assets/OtherFont/DmHelder.ttf
-    
+        - asset: lib\assets\Space_Grotesk_Font\SpaceGrotesk-Regular.ttf
+
+  assets:
+    - lib\assets\amorClassIcon.svg
+    - lib\assets\campaignsIcon.svg
+    # Add all your custom SVG icons here
