@@ -3,6 +3,7 @@ import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -120,18 +121,19 @@ class TemplateCard extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20))),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(10, 22, 10, 0),
-                    child: Icon(
-                      FontAwesomeIcons.shieldHalved,
+                    padding: const EdgeInsets.fromLTRB(10, 22, 10, 0),
+                    child: SvgPicture.asset(
+                      'lib/assets/npcIcon.svg',
                       color: AppProperties.enemyRedDark,
-                      size: 25,
+                      width: 20,
+                      height: 20,
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(0,0,0,10),
                     child: RotatedBox(
                       quarterTurns: 135,

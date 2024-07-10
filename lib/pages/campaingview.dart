@@ -4,6 +4,7 @@ import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/comabtprepteam.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -73,10 +74,13 @@ class _CampaignViewState extends State<CampaignView> {
                   borderRadius: BorderRadius.circular(AppProperties.bRadius*3)),
               height: 60,
               width: 60,
-              child: const Icon(
-                FontAwesomeIcons.fire,
-                color: Colors.white,
-                size: 40,
+              child: 
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  'lib/assets/combatIcon.svg',
+                  color: Colors.white,
+                ),
               )
               ),
             ),

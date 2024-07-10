@@ -1,9 +1,11 @@
+import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/combatprepenemies.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -13,14 +15,11 @@ class CombatPrepTeam extends StatelessWidget {
   const CombatPrepTeam({super.key, required this.indexCampaign});
   void addHeroesToPartake() {
     for (int i = 0; i < campaigns[indexCampaign].characters.length; i++) {
-      if (campaigns[indexCampaign].characters[i].participate == true) {
-        combat.heroes.add(campaigns[indexCampaign].characters[i]);
+      Character original = campaigns[indexCampaign].characters[i];
+      if (original.participate == true) {
+        combat.heroes.add(Character.copy(original));
+        combat.partake.add(Character.copy(original));
       }
-    }
-  }
-  void addHeroesToCombat() {
-    for(int i = 0; i < combat.heroes.length; i++) {
-      combat.partake.add(combat.heroes[i]);
     }
   }
 
@@ -46,7 +45,6 @@ class CombatPrepTeam extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 addHeroesToPartake();
-                addHeroesToCombat();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -92,32 +90,53 @@ class _CombatHeroesViewTopBar extends State<CombatHeroesViewTopBar> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+          margin: const EdgeInsets.fromLTRB(17.5, 40, 15, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  combat.heroes.clear();
-                  Navigator.pop(context);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
-                  child: Icon(Icons.arrow_back,
-                      color: AppProperties.heroPurple, size: 40),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                  'lib/assets/combatIcon.svg',
+                  height: 24,
+                 ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(5,0,0,0),
+                  child: Text(
+                    "COMBAT PREP",
+                    style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
               ),
-              const Text(
-                "COMBAT PREP",
-                style: TextStyle(
-                  fontSize: 18,
-                ),
+                ],
               ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HelperFunctions.cancelCombat(context, 1);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 10, 15, 10),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        child: Icon(FontAwesomeIcons.x,
+                            color: Colors.white, 
+                            size: 30,
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),  
             ],
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(50, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(17.5, 0, 0, 0),
           alignment: Alignment.centerLeft,
           child: const Text(
             "ADD HEROES",
@@ -158,25 +177,18 @@ class _CombatViewAddHero extends State<CombatViewAddHero> {
   int count = getAllParticipatingTeam();
     return Consumer<Updater>(builder: (context, value, child) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      margin: const EdgeInsets.fromLTRB(17.5, 20, 20, 0),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            height: 60,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppProperties.bRadius),
-            ),
-            padding: const EdgeInsets.all(5),
-            child: Container(
+            Container(
               height: 55,
-              width: 140,
+              width: 170,
               decoration: BoxDecoration(
                 color: AppProperties.cardColor2,
                 borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                border: Border.all(color: Colors.white)
               ),
               child: Center(
                 child: Text(
@@ -185,11 +197,13 @@ class _CombatViewAddHero extends State<CombatViewAddHero> {
                       : '${getAllParticipatingTeam()} Participants',
                   style: const TextStyle(
                     color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600
                   ),
                 ),
               ),
             ),
-          ),
+
         ],
       ),
     );
@@ -259,7 +273,7 @@ class _CombatCharacterCardState extends State<CombatCharacterCard> {
               : 0.4,
           child: Card(
           color: const Color.fromARGB(255, 55, 55, 55),
-          margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+          margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Row(
             children: [

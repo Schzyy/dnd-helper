@@ -78,16 +78,22 @@ class _HomeState extends State<Home> {
         onTap: onTabTapped,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesomeIcons.spaghettiMonsterFlying,
+            icon: SvgPicture.asset(
+              'lib/assets/npcIcon.svg',
               color: swap ? AppProperties.cardColor : Colors.white,
+              height: 40,
+              width: 40,
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.shieldHalved,
-            color: swap ?  Colors.white : AppProperties.cardColor),
-            label: '',
+            icon: SvgPicture.asset(
+              'lib/assets/campaignsIcon.svg',
+              color: swap ?  Colors.white : AppProperties.cardColor,
+              height: 40,
+              width: 40,
+            ),
+            label: ''
           ),
         ],
       ),
@@ -284,7 +290,7 @@ class CampaignOverviewCard extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: rotatingColorTop[index%3],
+                color: rotatingColorTop[0],
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(AppProperties.cardRadius),
                   topRight: Radius.circular(AppProperties.cardRadius)
@@ -299,10 +305,10 @@ class CampaignOverviewCard extends StatelessWidget {
                       width: 30,
                       height: 30,
                       child: SvgPicture.asset(
-                        'assets/campaignsIcon.svg',
+                        'lib/assets/campaignsIcon.svg',
                         width: 30,
                         height: 30,
-                        color: Colors.black,
+                        color: rotatingColorFont[0],
                       ),
                     ),
                   ),
@@ -311,8 +317,9 @@ class CampaignOverviewCard extends StatelessWidget {
                     child: Text(
                       "Campaign",
                       style: TextStyle(
-                        color: rotatingColorFont[index%3],
+                        color: rotatingColorFont[0],
                         fontSize: 20,
+                        fontWeight: FontWeight.w600
                       ),
                     ),
                   ),

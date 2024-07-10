@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/pages/charactercreator.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,6 @@ void addEnemiesToPartake() {
               child: GestureDetector(
                 onTap: () {
                   combat.partake.clear();
-                  combat.heroes.clear();
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -77,6 +77,11 @@ void addEnemiesToPartake() {
               right: 20,
               child: GestureDetector(
                 onTap: () {
+                  if(combat.partake.isEmpty) {
+                    for(int i = 0; i < combat.heroes.length; i++) {
+                      combat.partake.add(combat.heroes[i]);
+                    }
+                  }
                 addEnemiesToCombat();
                 addEnemiesToPartake();
                 Navigator.push(
@@ -114,38 +119,55 @@ class CombatEnemyViewTopBar extends StatefulWidget {
 class _CombatEnemyViewTopBar extends State<CombatEnemyViewTopBar> {
   @override
   Widget build(BuildContext context) {
-    void emptyEnemies() {
-    combat.opponentes.clear();
-    for(int i = 0; i < chars.length; i++) {
-      chars[i].amount = 0;
-    }
-  }
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          margin: const EdgeInsets.fromLTRB(17.5, 40, 15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                  padding: EdgeInsets.fromLTRB(5,10,10,10),
-                child: Text(
-                  "COMBAT PREP",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: AppProperties.cardColor3,
+              Row(
+                children: [
+                  SvgPicture.asset(
+                  'lib/assets/combatIcon.svg',
+                  height: 24,
+                 ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(5,0,0,0),
+                  child: Text(
+                    "COMBAT PREP",
+                    style: TextStyle(
+                    fontSize: 25,
                     fontWeight: FontWeight.w600
                   ),
                 ),
               ),
+                ],
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HelperFunctions.cancelCombat(context, 2);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 10, 15, 10),
+                      child: Icon(FontAwesomeIcons.x,
+                          color: Colors.white, 
+                          size: 30,
+                          ),
+                    ),
+                  ),
+                ],
+              ),  
             ],
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(17.5, 0, 0, 0),
           alignment: Alignment.centerLeft,
           child: const Text(
-            "Add Enemies",
+            "ADD ENEMIES",
             style: TextStyle(
               fontSize: 20,
             ),
@@ -176,25 +198,18 @@ class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
   Widget build(BuildContext context) {
     return Consumer<Updater>(builder: (context, value, child) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      margin: const EdgeInsets.fromLTRB(17.5, 20, 20, 0),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            height: 60,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppProperties.bRadius),
-            ),
-            padding: const EdgeInsets.all(5),
-            child: Container(
               height: 55,
               width: 140,
               decoration: BoxDecoration(
                 color: AppProperties.cardColor2,
                 borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                border: Border.all(color: Colors.white)
               ),
               child: Center(
                 child: Text(
@@ -207,7 +222,6 @@ class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -228,7 +242,7 @@ class _CombatHeroView extends State<CombatEnemyView> {
   Widget build(BuildContext context) {
     return Consumer<Updater>(builder: (context, value, child) {
       return ListView.builder(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         itemCount: chars.length,
         itemBuilder: (context, characterIndex) {
           return CombatEnemyCard(
@@ -267,15 +281,15 @@ class CombatEnemyCard extends StatelessWidget {
                   bottomLeft: Radius.circular(AppProperties.cardRadius)
                 )
               ),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(10,10,10,10),
-                      child: Icon(
-                        FontAwesomeIcons.shield,
-                        size: 30,
-                      ),
+                      padding: EdgeInsets.fromLTRB(10,0,10,0),
+                      child: SvgPicture.asset(
+                        'lib/assets/npcIcon.svg',
+                        color: AppProperties.enemyRedDark,
+                      )
                     ),
                 ],
               ),
@@ -285,7 +299,7 @@ class CombatEnemyCard extends StatelessWidget {
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                    padding: const EdgeInsets.fromLTRB(15, 10.0, 15.0, 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

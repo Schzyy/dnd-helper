@@ -1,8 +1,6 @@
 import 'campaign.dart';
 
-//Beispielwerte zum testen solange die Datenbank nicht sitzt
 
-//Mockup für Campainglist
 List<Campaign> campaigns = [
   Campaign(
     name: 'Azeroth',

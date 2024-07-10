@@ -6,6 +6,7 @@ import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/pages/combat.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CombatTurnOrderPage extends StatelessWidget {
@@ -19,6 +20,10 @@ class CombatTurnOrderPage extends StatelessWidget {
           combat.partake[i].currentInit = Random().nextInt(20) + 1 + combat.partake[i].initModifier;
         }
       }
+    }
+    void removeEnemies() {
+      combat.partake.clear();
+      combat.opponentes.clear();
     }
     return Scaffold(
       body: Stack(
@@ -62,8 +67,7 @@ class CombatTurnOrderPage extends StatelessWidget {
             left: 20,
             child: GestureDetector(
               onTap: () {
-                combat.opponentes.clear();
-                combat.partake.clear();
+                removeEnemies();
                 Navigator.pop(context);
               },
               child: Container(
@@ -99,35 +103,52 @@ class _TurnOrderTopBarState extends State<TurnOrderTopBar> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+          margin: const EdgeInsets.fromLTRB(17.5, 40, 15, 0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  combat.heroes.clear();
-                  Navigator.pop(context);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
-                  child: Icon(Icons.arrow_back,
-                      color: AppProperties.heroPurple, size: 40),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                  'lib/assets/combatIcon.svg',
+                  height: 24,
+                 ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(5,0,0,0),
+                  child: Text(
+                    "COMBAT PREP",
+                    style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
               ),
-              const Text(
-                "Turn Order",
-                style: TextStyle(
-                  fontSize: 30,
-                ),
+                ],
               ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HelperFunctions.cancelCombat(context, 2);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 10, 15, 10),
+                      child: Icon(FontAwesomeIcons.x,
+                          color: Colors.white, 
+                          size: 30,
+                          ),
+                    ),
+                  ),
+                ],
+              ),  
             ],
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(17.5, 0, 0, 10),
           alignment: Alignment.centerLeft,
           child: const Text(
-            "Set Initiative",
+            "SELECT INITIATIVE",
             style: TextStyle(
               fontSize: 20,
             ),
@@ -171,149 +192,142 @@ class ParticipantsCard extends StatefulWidget {
 
 class _ParticipantsCardState extends State<ParticipantsCard> {
   TextEditingController controller = TextEditingController();
-  bool inUse = true;
+  
+  bool inUse = false;
+  FocusNode node = FocusNode();
+  late Color outColor;
+  late Color inColor;
   bool isNotNumeric(String value) {
     return double.tryParse(value) == null;
   }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void handleFocus() {
+    setState(() {
+      inUse = node.hasFocus;
+    });
+    if(!node.hasFocus) {
+      setState(() {
+        inUse = false;
+      });
+    }
   }
-
+  void showSnackbar(BuildContext context) {
+    const snackBar = SnackBar(
+      content: Text("Invalid Input! Try any postive number"),
+      duration: Duration(
+        seconds: 3
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+  @override
+  void initState() {
+    super.initState();
+    controller.text = '0';
+    outColor = combat.partake[widget.index].good ? AppProperties.heroPurple : AppProperties.enemyRed ;
+    inColor = combat.partake[widget.index].good ? AppProperties.herpPurpleDark : AppProperties.enemyRedDark;
+    node.addListener(handleFocus);
+  }
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: Card(
-        color: AppProperties.cardColor2,
-        margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppProperties.bRadius),
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          inUse = true;
+          node.requestFocus();
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+        height: 80,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: inUse ? Colors.white : Color.fromARGB(0,0,0,0),
+          ),
+          color: AppProperties.cardColor2,
+          borderRadius: BorderRadius.circular(AppProperties.bRadius)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Container(
-                  height: 80,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: combat.partake[widget.index].good
-                        ? AppProperties.heroPurple
-                        : AppProperties.enemyRed,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppProperties.bRadius),
-                      bottomLeft: Radius.circular(AppProperties.bRadius),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: combat.partake[widget.index].good
-                        ? const Icon(
-                            FontAwesomeIcons.shield,
-                            size: 35,
-                          )
-                        : const Icon(
-                            FontAwesomeIcons.hammer,
-                            size: 35,
-                          ),
-                  ),
-                ),
-                Container(
-                  height: 80,
-                  width: 100,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: FittedBox(
-                      child: Text(
-                        combat.partake[widget.index].name,
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              width: 160,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              Row(
                 children: [
-                  GestureDetector(
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: AppProperties.cardColor2,
-                      width: 50,
-                      height: 80,
-                      child: inUse
-                          ? FittedBox(
-                            child: Text(controller.text.isEmpty ? "init" : controller.text,
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                          )
-                          : TextField(
-                              keyboardType: TextInputType.number,
-                              textAlign: TextAlign.end,
-                              controller: controller,
-                              focusNode: FocusNode(),
-                              onSubmitted: (value) {
-                                if (isNotNumeric(value)) {
-                                  controller.text = "invalid";
-                                } else if (int.parse(value) < 0 ||
-                                    int.parse(value) > 20) {
-                                  controller.text = "0";
-                                } else {
-                                  combat.partake[widget.index].currentInit =
-                                      int.parse(value) +
-                                          combat.partake[widget.index]
-                                              .initModifier;
-                                }
-                                setState(() {
-                                  inUse = true;
-                                });
-                              },
-                            ),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        inUse = false;
-                      });
-                    },
-                  ),
                   Container(
-                    color: Colors.blue,
-                    alignment: Alignment.center,
+                    height: 80,
                     width: 50,
-                    child: Text(
-                      '+ ${combat.partake[widget.index].initModifier}',
-                      style: const TextStyle(
-                        fontSize: 20,
+                    decoration: BoxDecoration(
+                      color: 
+                      inUse ? inColor : outColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(AppProperties.bRadius),
+                        bottomLeft: Radius.circular(AppProperties.bRadius),
+                      )
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SvgPicture.asset(
+                        combat.partake[widget.index].good ? 'lib/assets/combatIcon.svg' : 'lib/assets/npcIcon.svg',
+                        color: inUse ? outColor : inColor, 
+                        width: 30,
+                        height: 30,
                       ),
                     ),
                   ),
-                  Container(
-                    color: combat.partake[widget.index].good
-                        ? AppProperties.heroPurple
-                        : AppProperties.enemyRed,
-                    alignment: Alignment.center,
-                    width: 50,
-                    child: Text(
-                        combat.partake[widget.index].currentInit.toString(),
-                        style: const TextStyle(
-                              fontSize: 20,
-                            ),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                      child: Text(
+                        combat.partake[widget.index].name
+                      ),
                     ),
-                  ),
                 ],
               ),
-            ),
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(AppProperties.bRadius),
+                          bottomRight: Radius.circular(AppProperties.bRadius)
+                        )
+                      ),
+                        height: 80,
+                        width: 40,
+                        child: TextField(
+                          controller: controller,
+                          focusNode: node,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                          onSubmitted: (value) {
+                            setState(() {
+                            if(isNotNumeric(value)) {
+                              inUse = false;
+                              controller.text = '0';
+                              showSnackbar(context);
+                              return;
+                            } 
+                            if(int.parse(value) <= 0) {
+                              inUse = false;
+                              controller.text = '0';
+                              showSnackbar(context);
+                              return;
+                            }
+                            inUse = false;
+                            combat.partake[widget.index].currentInit = int.parse(value);
+                            
+                            });
+                            },
+                        ),
+
+                )],
+                ),
+              ),
           ],
         ),
       ),
