@@ -4,6 +4,7 @@ import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/models/updater.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dmhelper/models/campaign.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +58,7 @@ class _CharactercreatorState extends State<Charactercreator> {
   bool dexEditing = false;
   bool strProf = false;
   bool dexProf = false;
-  bool intProf = false;
+  bool intProf = true;
   bool conProf = false;
   bool wisProf = false;
   bool chaProf = false;
@@ -199,15 +200,15 @@ class _CharactercreatorState extends State<Charactercreator> {
     raceController.text = "-";
     classController.text = "-";
     armorController.text = "10";
-    levelController.text = "17";
+    levelController.text = "1";
     msController.text = "30";
     hpController.text = "20";
-    strController.text = "10";
-    dexController.text = "14";
-    conController.text = "10";
-    chaController.text = "10";
-    wisController.text = "10";
-    intController.text = "10";
+    strController.text = "8";
+    dexController.text = "8";
+    conController.text = "8";
+    chaController.text = "8";
+    wisController.text = "8";
+    intController.text = "8";
   }
 
   @override
@@ -218,24 +219,50 @@ class _CharactercreatorState extends State<Charactercreator> {
           children: [
             const CharacterCreatorTopBar(),
             Container(
-              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              margin: const EdgeInsets.fromLTRB(17.5, 30, 0, 0),
               child: Row(
                 children: [
                   Flexible(
                     flex: 3,
                     child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      height: 60,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppProperties.allyYellow
-                        )
+                        color: widget.good ? AppProperties.heroPurple : AppProperties.enemyRed,
+                        borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: widget.good ? 
+                          const Icon(
+                            FontAwesomeIcons.shield,
+                            color: AppProperties.herpPurpleDark,
+                          ) :
+                          SvgPicture.asset(
+                            'lib/assets/npcIcon.svg',
+                            color: AppProperties.enemyRedDark,
+                          ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: Text(
+                              widget.good ? "HERO" : "ENEMY",
+                              style: TextStyle(
+                                color: widget.good ? AppProperties.herpPurpleDark : AppProperties.enemyRedDark,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w600
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
                   Flexible(
                     flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 30, 10, 0),
-                      child: Container(
+                    child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.white,
@@ -259,7 +286,6 @@ class _CharactercreatorState extends State<Charactercreator> {
                           },
                         ),
                       ),
-                    ),
                   ),
                 ],
               ),
@@ -695,7 +721,10 @@ class _CharactercreatorState extends State<Charactercreator> {
                         Expanded(
                           child: GestureDetector(
                             child: Container(
-                              color: AppProperties.cardColor2,
+                              decoration: BoxDecoration(
+                                color: AppProperties.cardColor2,
+                                borderRadius: BorderRadius.circular(AppProperties.bRadius)
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

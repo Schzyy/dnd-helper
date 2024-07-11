@@ -129,7 +129,7 @@ class _TurnOrderTopBarState extends State<TurnOrderTopBar> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      HelperFunctions.cancelCombat(context, 2);
+                      HelperFunctions.cancelCombat(context, 3);
                     },
                     child: const Padding(
                       padding: EdgeInsets.fromLTRB(5, 10, 15, 10),

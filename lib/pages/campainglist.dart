@@ -257,12 +257,9 @@ class CampaignOverviewCard extends StatelessWidget {
   const CampaignOverviewCard({
     super.key,
     required this.title,
-    required this.characters, 
+    required this.characters,
     required this.index,
   });
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -280,57 +277,54 @@ class CampaignOverviewCard extends StatelessWidget {
     return SizedBox(
       height: 160,
       child: Card(
-        color: const Color.fromARGB(255, 55, 55, 55),
-        margin: const EdgeInsets.fromLTRB(10,10,10,5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppProperties.cardRadius)
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: rotatingColorTop[0],
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(AppProperties.cardRadius),
-                  topRight: Radius.circular(AppProperties.cardRadius)
+          color: const Color.fromARGB(255, 55, 55, 55),
+          margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppProperties.cardRadius)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: rotatingColorTop[0],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppProperties.cardRadius),
+                      topRight: Radius.circular(AppProperties.cardRadius)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5),
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        child: SvgPicture.asset(
+                          'lib/assets/campaignsIcon.svg',
+                          width: 30,
+                          height: 30,
+                          color: rotatingColorFont[0],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
+                      child: Text(
+                        "Campaign",
+                        style: TextStyle(
+                            color: rotatingColorFont[0],
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0,5.0,15.0,5),
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      child: SvgPicture.asset(
-                        'lib/assets/campaignsIcon.svg',
-                        width: 30,
-                        height: 30,
-                        color: rotatingColorFont[0],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0,0,15.0,0),
-                    child: Text(
-                      "Campaign",
-                      style: TextStyle(
-                        color: rotatingColorFont[0],
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0,15.0,15.0,0),
+                    padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
                     child: Text(
                       title,
                       overflow: TextOverflow.ellipsis,
@@ -339,27 +333,82 @@ class CampaignOverviewCard extends StatelessWidget {
                       ),
                     ),
                   ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
-                  child: Text(
-                    '$characters Heroes',
-                    style: const TextStyle(
-                      fontSize: 15,
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: rotatingColorFont[0],
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: AppProperties.cardColor2,
+                                content: GestureDetector(
+                                  onTap: () {
+                                    campaigns.removeAt(index);
+                                    Navigator.pop(context);
+                                    Provider.of<Updater>(context, listen: false).refresh();
+                                  },
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                      maxHeight:
+                                          200, // Adjusted to a smaller size
+                                      maxWidth:
+                                          300, // Adjusted to a smaller size
+                                    ),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          AppProperties.bRadius),
+                                      color: AppProperties.cardColor2,
+                                    ),
+                                    child: const Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Delete Campaign",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 24,
+                                            color: Colors.white,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                    child: Text(
+                      '$characters Heroes',
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
-        )
-      ),
+                ],
+              )
+            ],
+          )),
     );
   }
 }

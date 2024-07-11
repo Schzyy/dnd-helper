@@ -86,7 +86,14 @@ void addEnemiesToPartake() {
                 addEnemiesToPartake();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CombatTurnOrderPage()));
+                  MaterialPageRoute(builder: (context) => CombatTurnOrderPage())
+                  ).then(
+                    (value) {
+                      combat.partake.clear();
+                      combat.opponentes.clear();
+                      Provider.of<Updater>(context, listen: false).refresh();
+                    },
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -117,6 +124,13 @@ class CombatEnemyViewTopBar extends StatefulWidget {
 }
 
 class _CombatEnemyViewTopBar extends State<CombatEnemyViewTopBar> {
+  @override
+  void initState() {
+    for(int i = 0; i < chars.length; i++) {
+      chars[i].amount = 0;
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(

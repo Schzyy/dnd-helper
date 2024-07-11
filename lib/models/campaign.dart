@@ -1,37 +1,62 @@
+import 'package:hive/hive.dart';
 
+part 'campaign.g.dart';
 
-void createCampaign(List<Campaign> campaign, String name) {
-  Campaign newCampaing = Campaign(name: name, characters: []);
-  campaign.add(newCampaing);
+class HiveFunctions {
+  
+  final Box box = Hive.box('mockup');
+
 }
 
+@HiveType(
+  typeId: 0,
+  adapterName: 'campaignAdapter'
+)
+
 class Campaign {
+  @HiveField(0)
   String name;
+  @HiveField(1)
   List<Character> characters;
 
   Campaign({
     required this.name,
     required this.characters,
   });
-  void removeCharacter(int i) {
-    characters.removeAt(i);
-  }
 }
-
+@HiveType(
+  typeId: 1,
+  adapterName: 'CharacterAdapter'
+)
 class Character {
+  
+  @HiveField(0)
   bool participate;
+  @HiveField(1)
   bool dead;
+  @HiveField(2)
   int amount;
+  @HiveField(3)
   int initModifier;
+  @HiveField(4)
   int currentInit;
+  @HiveField(5)
   bool good;
+  @HiveField(6)
   String name;
+  @HiveField(7)
   int level;
+  @HiveField(8)
   String race;
+  @HiveField(9)
   String characterclass;
+  @HiveField(10)
   int armorClass;
+  @HiveField(11)
   int walkingspeed;
+  @HiveField(12)
   Hp hp;
+  @HiveField(13)
   Stats stats;
 
   int returnInitModifier(int i) {
@@ -76,10 +101,16 @@ class Character {
         hp = Hp.copy(from.hp),
         stats = Stats.copy(from.stats);
 }
-
+@HiveType(
+  typeId: 2,
+  adapterName: 'hpAdapter'
+)
 class Hp {
+  @HiveField(0)
   int maxHp;
+  @HiveField(1)
   int? currentHp;
+  @HiveField(2)
   int? tempHp;
 
   Hp({
@@ -94,19 +125,34 @@ class Hp {
         currentHp = from.currentHp,
         tempHp = from.tempHp;
 }
-
+@HiveType(
+  typeId: 3,
+  adapterName: 'hpAdapter'
+)
 class Stats {
+  @HiveField(0)
   int str;
+  @HiveField(1)
   bool strProfieciency;
+  @HiveField(2)
   int dex;
+  @HiveField(3)
   bool dexProfieciency;
+  @HiveField(4)
   int con;
+  @HiveField(5)
   bool conProfieciency;
+  @HiveField(6)
   int inte;
+  @HiveField(7)
   bool intProfieciency;
+  @HiveField(8)
   int wis;
+  @HiveField(9)
   bool wisProfieciency;
+  @HiveField(10)
   int cha;
+  @HiveField(11)
   bool chaProfieciency;
 
   Stats({

@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/models/updater.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -34,11 +37,38 @@ class _CombatState extends State<Combat> {
   @override
   void initState() {
     super.initState();
+    sortByInit();
     dialogChars.add(combat.partake[0]);
   }
+  ScrollController scrollController = ScrollController();
+  void scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+          scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+  void sortByInit() {
+    Random random = Random();
+    setState(() {
+      combat.partake.sort((a,b) {
+      int initiativeComparison= b.currentInit.compareTo(a.currentInit);
+      if(initiativeComparison != 0) return initiativeComparison;
 
+      int initModifierComparision = b.initModifier.compareTo(a.initModifier);
+      if(initModifierComparision != 0) return initModifierComparision;
+
+      return random.nextInt(2) - 1;
+    });
+    });
+  }
   void goNext() {
     setState(() {
+      
       if (combat.partake[count % combat.partake.length].dead == false) {
         dialogChars.add(combat.partake[count % combat.partake.length]);
       }
@@ -56,10 +86,12 @@ class _CombatState extends State<Combat> {
           Expanded(
             child: CombatDialog(
               dialogChars: dialogChars,
+              scrollController: scrollController,
             ),
           ),
           CombatAdvance(
             goNext: goNext,
+            scrollToEnd: scrollToBottom,
           ),
         ],
       ),
@@ -78,29 +110,44 @@ class _CombatTopBarState extends State<CombatTopBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
+      margin: const EdgeInsets.fromLTRB(17.5, 40, 15, 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: () {
-              combat.heroes.clear();
-              Navigator.pop(context);
-            },
-            child: const Padding(
-              padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
-              child: Icon(Icons.arrow_back,
-                  color: AppProperties.enemyRed, size: 40),
-            ),
-          ),
-          const Text(
-            "Combat",
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          ),
-        ],
-      ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset(
+                  'lib/assets/combatIcon.svg',
+                  height: 24,
+                 ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(5,0,0,0),
+                  child: Text(
+                    "COMBAT",
+                    style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+                ],
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HelperFunctions.cancelCombat(context, 4);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 10, 15, 10),
+                      child: Icon(FontAwesomeIcons.x,
+                          color: Colors.white, 
+                          size: 30,
+                          ),
+                    ),
+                  ),
+                ],
+              ),])
     );
   }
 }
@@ -109,8 +156,9 @@ class CombatDialog extends StatefulWidget {
   const CombatDialog({
     super.key,
     required this.dialogChars,
+    required this.scrollController
   });
-
+  final ScrollController scrollController;
   final List<Character> dialogChars;
 
   @override
@@ -119,22 +167,13 @@ class CombatDialog extends StatefulWidget {
 
 class _CombatDialogState extends State<CombatDialog> {
   late ScrollController scrollController;
+  
   @override
   initState() {
     super.initState();
-    scrollController = ScrollController();
   }
-  void scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (scrollController.hasClients) {
-          scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
+  
+  @override
   Widget build(BuildContext context) {
     return Consumer<Updater>(
       builder: (context, value, child) {
@@ -147,9 +186,8 @@ class _CombatDialogState extends State<CombatDialog> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: widget.dialogChars.length - 1,
-                  controller: scrollController,
+                  controller: widget.scrollController,
                   itemBuilder: (context, index) {
-                    scrollToBottom();
                     return ParticipantCard(
                       displayChar: widget.dialogChars[index],
                     );
@@ -185,149 +223,153 @@ class CurrentParticipantCard extends StatefulWidget {
 class _CurrentParticipantCardState extends State<CurrentParticipantCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-      width: double.infinity,
-      height: AppProperties.screenHeight(context) * 0.35,
-      child: Card(
-        color: AppProperties.cardColor2,
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: widget.displayChar.good
-                    ? AppProperties.heroPurple
-                    : AppProperties.enemyRed,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
+    return GestureDetector(
+      onTap: () {
+        widget.displayChar.dead = !widget.displayChar.dead;
+        Provider.of<Updater>(context, listen: false).refresh();
+      },
+      child: Container(
+        margin: widget.displayChar.good ? EdgeInsets.fromLTRB(30, 10, 10, 0) : EdgeInsets.fromLTRB(10, 10, 30, 0),
+        width: double.infinity,
+        height: AppProperties.screenHeight(context) * 0.35,
+        child: Card(
+          color: AppProperties.cardColor2,
+          child: Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: widget.displayChar.good
+                      ? AppProperties.heroPurple
+                      : AppProperties.enemyRed,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: widget.displayChar.good ? const Icon(
+                        FontAwesomeIcons.shield,
+                        color: AppProperties.herpPurpleDark,
+                        size: 30,
+                      ) : SvgPicture.asset(
+                        'lib/assets/npcIcon.svg',
+                        color: AppProperties.enemyRedDark,
+                      )
+                    ),
+                    RotatedBox(
+                      quarterTurns: 135,
+                      child: Text(
+                        widget.displayChar.good ? "HERO" : "ENEMY",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: widget.displayChar.good ? AppProperties.herpPurpleDark : AppProperties.enemyRedDark,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Icon(
-                      FontAwesomeIcons.shield,
-                      size: 30,
-                    ),
-                  ),
-                  RotatedBox(
-                    quarterTurns: 135,
-                    child: Text(
-                      widget.displayChar.good ? "Hero" : "Enemy",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: AppProperties.herpPurpleDark,
-                        fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 4,
+                            child: FittedBox(
+                              child: Text(
+                                widget.displayChar.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 30),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: Icon(
+                                  FontAwesomeIcons.skull,
+                                  size: 30,
+                                  color: widget.displayChar.dead ? AppProperties.screenColor : Colors.white,
+                                ),
+                                
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 4,
-                          child: FittedBox(
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 1,
                             child: Text(
-                              widget.displayChar.name,
+                              widget.displayChar.race,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 30),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: GestureDetector(
-                              child: const Icon(
-                                FontAwesomeIcons.skull,
-                                size: 30,
-                                color: Colors.white,
+                              style: const TextStyle(
+                                fontSize: 15,
                               ),
-                              onTap: () {
-                                widget.displayChar.dead = true;
-                                Provider.of<Updater>(context, listen: false).refresh();
-
-                              },
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            widget.displayChar.race,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            widget.displayChar.characterclass,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            widget.displayChar.currentInit.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.shield,
-                                size: 35,
-                                color: AppProperties.heroPurple,
+                          Flexible(
+                            flex: 1,
+                            child: Text(
+                              widget.displayChar.characterclass,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
                               ),
-                              Text(
-                                widget.displayChar.armorClass.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Text(
+                              widget.displayChar.currentInit.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.shield,
+                                  size: 35,
+                                  color: widget.displayChar.good ? AppProperties.heroPurple : AppProperties.enemyRed,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  widget.displayChar.armorClass.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -344,129 +386,126 @@ class ParticipantCard extends StatefulWidget {
 class _ParticipantCardState extends State<ParticipantCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: widget.displayChar.good ? EdgeInsets.fromLTRB(70, 0, 10, 0) : EdgeInsets.fromLTRB(10, 0, 70, 0),
-      width: double.infinity,
-      height: AppProperties.screenHeight(context) * 0.35,
-      child: Card(
-        color: AppProperties.cardColor2,
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: widget.displayChar.good
-                    ? AppProperties.heroPurple
-                    : AppProperties.enemyRed,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Icon(
-                      FontAwesomeIcons.shield,
-                      size: 30,
-                    ),
+    return Opacity(
+      opacity: widget.displayChar.dead ? 0.4 : 1.0,
+      child: Container(
+        margin: widget.displayChar.good ? EdgeInsets.fromLTRB(90, 10, 10, 10) : EdgeInsets.fromLTRB(10, 10, 90, 5),
+        width: double.infinity,
+        height: 90,
+        child: Card(
+          color: AppProperties.cardColor2,
+          child: Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: widget.displayChar.good
+                      ? AppProperties.heroPurple
+                      : AppProperties.enemyRed,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
                   ),
-                  RotatedBox(
-                    quarterTurns: 135,
-                    child: Text(
-                      widget.displayChar.good ? "Hero" : "Enemy",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: widget.displayChar.good ? AppProperties.herpPurpleDark : AppProperties.enemyRedDark,
-                        fontWeight: FontWeight.bold,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: widget.displayChar.good ? const Icon(
+                        FontAwesomeIcons.shield,
+                        color: AppProperties.herpPurpleDark,
+                        size: 28,
+                      ) : SvgPicture.asset(
+                        'lib/assets/npcIcon.svg',
+                        color: AppProperties.enemyRedDark,
                       ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(
-                          flex: 4,
-                          child: Text(
-                            widget.displayChar.name,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 30),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            widget.displayChar.race,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            widget.displayChar.characterclass,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Text(
-                            widget.displayChar.currentInit.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.shield,
-                                size: 35,
-                                color: AppProperties.heroPurple,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              flex: 4,
+                              child: Text(
+                                widget.displayChar.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 15),
                               ),
-                              Text(
-                                widget.displayChar.armorClass.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              child: Text(
+                                widget.displayChar.race,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Text(
+                                widget.displayChar.characterclass,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Text(
+                                widget.displayChar.currentInit.toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 1,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.shield,
+                                    size: 20,
+                                    color: widget.displayChar.good ?AppProperties.heroPurple : AppProperties.enemyRed,
+                                  ),
+                                  Text(
+                                    widget.displayChar.armorClass.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -476,9 +515,10 @@ class _ParticipantCardState extends State<ParticipantCard> {
 class CombatAdvance extends StatefulWidget {
   const CombatAdvance({
     super.key,
-    required this.goNext,
+    required this.goNext, 
+    required this.scrollToEnd,
   });
-
+  final Function scrollToEnd;
   final Function goNext;
 
   @override
@@ -499,6 +539,7 @@ class _CombatAdvanceState extends State<CombatAdvance> {
             child: GestureDetector(
               onTap: () {
                 widget.goNext();
+                widget.scrollToEnd();
               },
               child: Container(
                 width: 70,

@@ -174,11 +174,12 @@ class TemplateCard extends StatelessWidget {
                           flex: 1,
                           child: GestureDetector(
                               child: const Icon(
-                                Icons.person,
+                                Icons.remove,
                                 size: 30,
                                 color: Colors.white,
                               ),
                               onTap: () {
+                                chars.removeAt(index);
                                 Provider.of<Updater>(context, listen: false).refresh();
                               }),
                         )

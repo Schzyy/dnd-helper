@@ -103,7 +103,7 @@ class HelperFunctions {
       },
     );
   }
-  static void cancelCombat (BuildContext context, int howFar) {
+  static void cancelCombat(BuildContext context, int howFar) {
     showDialog(context: 
     context, 
     builder: (context) => AlertDialog(

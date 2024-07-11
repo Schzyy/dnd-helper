@@ -51,6 +51,12 @@ class CombatPrepTeam extends StatelessWidget {
                     builder: (context) =>
                         const CombatPrepEnemies(indexCampaign: 0),
                   ),
+                ).then(
+                  (value) {
+                    combat.partake.clear();
+                    combat.opponentes.clear();
+                    combat.heroes.clear();
+                  },
                 );
               },
               child: Container(
