@@ -106,7 +106,7 @@ class _ParticipantCardState extends State<ParticipantViewCard> {
                       ),
                   ],
                 ),
-                Container(
+                SizedBox(
                   child: Row(
                     children: [
                       Padding(
@@ -116,7 +116,7 @@ class _ParticipantCardState extends State<ParticipantViewCard> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(

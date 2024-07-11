@@ -229,7 +229,7 @@ class _CurrentParticipantCardState extends State<CurrentParticipantCard> {
         Provider.of<Updater>(context, listen: false).refresh();
       },
       child: Container(
-        margin: widget.displayChar.good ? EdgeInsets.fromLTRB(30, 10, 10, 0) : EdgeInsets.fromLTRB(10, 10, 30, 0),
+        margin: widget.displayChar.good ? const EdgeInsets.fromLTRB(30, 10, 10, 0) : const EdgeInsets.fromLTRB(10, 10, 30, 0),
         width: double.infinity,
         height: AppProperties.screenHeight(context) * 0.35,
         child: Card(
@@ -389,7 +389,7 @@ class _ParticipantCardState extends State<ParticipantCard> {
     return Opacity(
       opacity: widget.displayChar.dead ? 0.4 : 1.0,
       child: Container(
-        margin: widget.displayChar.good ? EdgeInsets.fromLTRB(90, 10, 10, 10) : EdgeInsets.fromLTRB(10, 10, 90, 5),
+        margin: widget.displayChar.good ? const EdgeInsets.fromLTRB(90, 10, 10, 10) : const EdgeInsets.fromLTRB(10, 10, 90, 5),
         width: double.infinity,
         height: 90,
         child: Card(

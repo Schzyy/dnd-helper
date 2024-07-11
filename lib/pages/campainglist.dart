@@ -5,7 +5,6 @@ import 'package:dmhelper/pages/campaingview.dart';
 import 'package:dmhelper/pages/templates.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:dmhelper/models/pallete.dart';
 
@@ -45,24 +44,49 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
   int currentPageIndex = 1;
+  
+  @override
+  void initState() {
+    getFromBox(hiveBox);
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.paused) {
+    } else if (state == AppLifecycleState.detached) {
+      hiveBox.close();
+    }
+  }
 
   final List<Widget> pages = [
     const TemplatePage(),
     const CampaignSelector(),
   ];
+
   bool swap = true;
+
   void onTabTapped(int index) {
     setState(() {
-      if(index != currentPageIndex) {
+      if (index != currentPageIndex) {
         swap = !swap;
       }
       currentPageIndex = index;
-
     });
   }
 
@@ -89,11 +113,11 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'lib/assets/campaignsIcon.svg',
-              color: swap ?  Colors.white : AppProperties.cardColor,
+              color: swap ? Colors.white : AppProperties.cardColor,
               height: 40,
               width: 40,
             ),
-            label: ''
+            label: '',
           ),
         ],
       ),
@@ -129,82 +153,83 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
   final newCampaingNameController = TextEditingController();
 
   void save() {
-    if(newCampaingNameController.text.isNotEmpty) {
-      campaigns.add(Campaign(name:newCampaingNameController.text, characters: []));
+    if (newCampaingNameController.text.isNotEmpty) {
+      campaigns.add(Campaign(name: newCampaingNameController.text, characters: []));
       newCampaingNameController.text = "";
       Provider.of<Updater>(context, listen: false).refresh();
       Navigator.pop(context);
     }
   }
+
   void cancel() {
-    if(newCampaingNameController.text.isNotEmpty) {
+    if (newCampaingNameController.text.isNotEmpty) {
       newCampaingNameController.text = "";
-    } 
+    }
     Provider.of<Updater>(context, listen: false).refresh();
     Navigator.pop(context);
   }
 
   void goToCampaignCreation() {
     showDialog(
-      context: context, 
+      context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.black,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              "Create your Campaing!",
+              "Create your Campaign!",
               style: TextStyle(
                 fontSize: 30,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0,10,0,10),
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: TextField(
                 controller: newCampaingNameController,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0,10.0,0,0),
+              padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
                     onTap: cancel,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppProperties.bRadius),
-                          color: Colors.white,
-                        ),
-                        height: 50,
-                        width: 60,
-        
-                        child: const Icon(
-                            Icons.remove,
-                          )
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                        color: Colors.white,
                       ),
-              
+                      height: 50,
+                      width: 60,
+                      child: const Icon(
+                        Icons.remove,
+                      ),
+                    ),
                   ),
                   GestureDetector(
-                    onTap: save,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppProperties.bRadius),
-                          color: Colors.white,
-                        ),
-                        height: 50,
-                        width: 60,
-                        child: const Icon(
-                          Icons.add,
-                        ),
+                    onTap: () {
+                      save();
+                      saveToBox(hiveBox);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                        color: Colors.white,
                       ),
-              
+                      height: 50,
+                      width: 60,
+                      child: const Icon(
+                        Icons.add,
+                      ),
+                    ),
                   ),
                 ],
               ),
             )
           ],
-        )
+        ),
       ),
     );
   }
@@ -218,11 +243,11 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("MY CAMPAIGNS",
-          style: TextStyle(
-            fontSize: 30
-          ),
-          
+          const Text(
+            "MY CAMPAIGNS",
+            style: TextStyle(
+              fontSize: 30,
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -235,14 +260,14 @@ class _TopbarCampaignsState extends State<TopbarCampaigns> {
                 borderRadius: BorderRadius.circular(AppProperties.bRadius),
                 color: Colors.white,
               ),
-                child: const Icon(
-                  Icons.add,
-                  weight: 10,
-                  size: 60,
-                  color: AppProperties.screenColor,
-                  ),
+              child: const Icon(
+                Icons.add,
+                weight: 10,
+                size: 60,
+                color: AppProperties.screenColor,
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -271,144 +296,145 @@ class CampaignOverviewCard extends StatelessWidget {
     List<Color> rotatingColorFont = [
       AppProperties.enemyRedDark,
       AppProperties.allyYellow,
-      AppProperties.herpPurpleDark
+      AppProperties.herpPurpleDark,
     ];
 
     return SizedBox(
       height: 160,
       child: Card(
-          color: const Color.fromARGB(255, 55, 55, 55),
-          margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppProperties.cardRadius)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: rotatingColorTop[0],
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppProperties.cardRadius),
-                      topRight: Radius.circular(AppProperties.cardRadius)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5),
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        child: SvgPicture.asset(
-                          'lib/assets/campaignsIcon.svg',
-                          width: 30,
-                          height: 30,
-                          color: rotatingColorFont[0],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-                      child: Text(
-                        "Campaign",
-                        style: TextStyle(
-                            color: rotatingColorFont[0],
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ],
+        color: const Color.fromARGB(255, 55, 55, 55),
+        margin: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppProperties.cardRadius),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: rotatingColorTop[0],
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(AppProperties.cardRadius),
+                  topRight: Radius.circular(AppProperties.cardRadius),
                 ),
               ),
-              Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
-                    child: Text(
-                      title,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.more_vert,
+                    padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5),
+                    child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: SvgPicture.asset(
+                        'lib/assets/campaignsIcon.svg',
+                        width: 30,
+                        height: 30,
                         color: rotatingColorFont[0],
-                        size: 30,
                       ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: AppProperties.cardColor2,
-                                content: GestureDetector(
-                                  onTap: () {
-                                    campaigns.removeAt(index);
-                                    Navigator.pop(context);
-                                    Provider.of<Updater>(context, listen: false).refresh();
-                                  },
-                                  child: Container(
-                                    constraints: const BoxConstraints(
-                                      maxHeight:
-                                          200, // Adjusted to a smaller size
-                                      maxWidth:
-                                          300, // Adjusted to a smaller size
-                                    ),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          AppProperties.bRadius),
-                                      color: AppProperties.cardColor2,
-                                    ),
-                                    child: const Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Delete Campaign",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 24,
-                                            color: Colors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            });
-                      },
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
+                  ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                    padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
                     child: Text(
-                      '$characters Heroes',
-                      style: const TextStyle(
-                        fontSize: 15,
+                      "Campaign",
+                      style: TextStyle(
+                        color: rotatingColorFont[0],
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ],
-              )
-            ],
-          )),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+                  child: Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: AppProperties.cardColor2,
+                            content: GestureDetector(
+                              onTap: () {
+                                campaigns.removeAt(index);
+                                Navigator.pop(context);
+                                Provider.of<Updater>(context, listen: false).refresh();
+                              },
+                              child: Container(
+                                constraints: const BoxConstraints(
+                                  maxHeight: 200, // Adjusted to a smaller size
+                                  maxWidth: 300, // Adjusted to a smaller size
+                                ),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                                  color: AppProperties.cardColor2,
+                                ),
+                                child: const Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Delete Campaign",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                  child: Text(
+                    '$characters Heroes',
+                    style: const TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -432,9 +458,7 @@ class _CampaignsListState extends State<CampaignsList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CampaignViewPage(
-                    index: index
-                  ),
+                  builder: (context) => CampaignViewPage(index: index),
                 ),
               );
             },
@@ -449,9 +473,3 @@ class _CampaignsListState extends State<CampaignsList> {
     });
   }
 }
-
-
-//TO-DO 
-// Color Variations to the CampaingCard
-// Add Functionality to remove a Campaing
-// Make a Pop up for Campaign creation

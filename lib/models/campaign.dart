@@ -2,15 +2,10 @@ import 'package:hive/hive.dart';
 
 part 'campaign.g.dart';
 
-class HiveFunctions {
-  
-  final Box box = Hive.box('mockup');
-
-}
 
 @HiveType(
   typeId: 0,
-  adapterName: 'campaignAdapter'
+  adapterName: 'CampaignAdapter'
 )
 
 class Campaign {
@@ -103,7 +98,7 @@ class Character {
 }
 @HiveType(
   typeId: 2,
-  adapterName: 'hpAdapter'
+  adapterName: 'HpAdapter'
 )
 class Hp {
   @HiveField(0)
@@ -127,7 +122,7 @@ class Hp {
 }
 @HiveType(
   typeId: 3,
-  adapterName: 'hpAdapter'
+  adapterName: 'StatAdapter'
 )
 class Stats {
   @HiveField(0)

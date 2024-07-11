@@ -1,5 +1,18 @@
+import 'package:hive/hive.dart';
+
 import 'campaign.dart';
 
+late Box hiveBox;
+
+void getFromBox(Box box) {
+  campaigns = (box.get('mockupcampaigns', defaultValue: campaigns).cast<Campaign>());
+  chars = (box.get('mockupcharacters', defaultValue: chars) as List).cast<Character>();
+}
+
+void saveToBox(Box box) {
+  box.put('mockupcampaigns', campaigns);
+  box.put('mockupcharacters', chars);
+}
 
 List<Campaign> campaigns = [
   Campaign(

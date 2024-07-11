@@ -4,7 +4,6 @@ import 'package:dmhelper/pages/combatturnorder.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/models/mockup.dart';
-import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +85,7 @@ void addEnemiesToPartake() {
                 addEnemiesToPartake();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CombatTurnOrderPage())
+                  MaterialPageRoute(builder: (context) => const CombatTurnOrderPage())
                   ).then(
                     (value) {
                       combat.partake.clear();
@@ -202,7 +201,7 @@ class CombatViewAddEnemy extends StatefulWidget {
 
 class _CombatViewAddEnemy extends State<CombatViewAddEnemy> {
   int getAllParticipatingEnemies() {
-    int count = chars.length;
+    int count = 1;
     for(int i = 0; i < chars.length ; i++) {
       count += chars[i].amount;
     }
@@ -299,7 +298,7 @@ class CombatEnemyCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(10,0,10,0),
+                      padding: const EdgeInsets.fromLTRB(10,0,10,0),
                       child: SvgPicture.asset(
                         'lib/assets/npcIcon.svg',
                         color: AppProperties.enemyRedDark,
@@ -348,7 +347,7 @@ class CombatEnemyCard extends StatelessWidget {
                         Flexible(
                           flex: 1,
                           child: Text(chars[indexCharacter].amount.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600
                           ),
                           )

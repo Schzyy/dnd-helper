@@ -1,7 +1,4 @@
-import 'dart:async';
 import 'dart:math';
-
-import 'package:dmhelper/models/campaign.dart';
 import 'package:dmhelper/models/mockup.dart';
 import 'package:dmhelper/models/pallete.dart';
 import 'package:dmhelper/pages/combat.dart';
@@ -242,7 +239,7 @@ class _ParticipantsCardState extends State<ParticipantsCard> {
         height: 80,
         decoration: BoxDecoration(
           border: Border.all(
-            color: inUse ? Colors.white : Color.fromARGB(0,0,0,0),
+            color: inUse ? Colors.white : AppProperties.screenColor,
           ),
           color: AppProperties.cardColor2,
           borderRadius: BorderRadius.circular(AppProperties.bRadius)
@@ -281,52 +278,50 @@ class _ParticipantsCardState extends State<ParticipantsCard> {
                     ),
                 ],
               ),
-              Container(
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(AppProperties.bRadius),
-                          bottomRight: Radius.circular(AppProperties.bRadius)
-                        )
-                      ),
-                        height: 80,
-                        width: 40,
-                        child: TextField(
-                          controller: controller,
-                          focusNode: node,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                          ),
-                          onSubmitted: (value) {
-                            setState(() {
-                            if(isNotNumeric(value)) {
-                              inUse = false;
-                              controller.text = '0';
-                              showSnackbar(context);
-                              return;
-                            } 
-                            if(int.parse(value) <= 0) {
-                              inUse = false;
-                              controller.text = '0';
-                              showSnackbar(context);
-                              return;
-                            }
-                            inUse = false;
-                            combat.partake[widget.index].currentInit = int.parse(value);
-                            
-                            });
-                            },
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(AppProperties.bRadius),
+                        bottomRight: Radius.circular(AppProperties.bRadius)
+                      )
+                    ),
+                      height: 80,
+                      width: 40,
+                      child: TextField(
+                        controller: controller,
+                        focusNode: node,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: EdgeInsets.zero,
                         ),
-
-                )],
-                ),
+                        onSubmitted: (value) {
+                          setState(() {
+                          if(isNotNumeric(value)) {
+                            inUse = false;
+                            controller.text = '0';
+                            showSnackbar(context);
+                            return;
+                          } 
+                          if(int.parse(value) <= 0) {
+                            inUse = false;
+                            controller.text = '0';
+                            showSnackbar(context);
+                            return;
+                          }
+                          inUse = false;
+                          combat.partake[widget.index].currentInit = int.parse(value);
+                          
+                          });
+                          },
+                      ),
+              
+              )],
               ),
           ],
         ),

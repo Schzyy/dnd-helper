@@ -3,7 +3,6 @@ import 'package:dmhelper/pages/combatparticipants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
 
 class AppProperties {
   static const Color screenColor = Color.fromARGB(255, 0, 0, 0);
@@ -41,7 +40,7 @@ class HelperFunctions {
           width: double.infinity,
           height: double.infinity,
           margin: const EdgeInsets.fromLTRB(17.5, 30, 12.5, 30),
-          padding: EdgeInsets.all(12.5),
+          padding: const EdgeInsets.all(12.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppProperties.bRadius),
             color: AppProperties.cardColor
@@ -77,9 +76,9 @@ class HelperFunctions {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Container(
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: SizedBox(
                         width: 40,
                         height: 40,
                         child: Icon(FontAwesomeIcons.x,
@@ -94,7 +93,7 @@ class HelperFunctions {
             ],
           ),
         ),
-              Expanded(
+              const Expanded(
                 child: Participant(),
               ),
             ],
@@ -139,7 +138,7 @@ class HelperFunctions {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: 230,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,7 +154,7 @@ class HelperFunctions {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(20, 0, 50, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 50, 0),
                       width: 115,
                       decoration: const BoxDecoration(
                         color: AppProperties.cardColor2
@@ -174,7 +173,7 @@ class HelperFunctions {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(50, 0, 20, 0),
+                      padding:const EdgeInsets.fromLTRB(50, 0, 20, 0),
                       width: 115,
                       decoration: const BoxDecoration(
                         color: AppProperties.cardColor2

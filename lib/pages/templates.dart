@@ -51,7 +51,7 @@ class _TopbarTemplatesState extends State<TopbarTemplates> {
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 15, 10, 0),
       width: double.infinity,
-      padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -218,7 +218,7 @@ class TemplateCard extends StatelessWidget {
                         Row(
                           children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(0,0,10,0),
+                            padding: const EdgeInsets.fromLTRB(0,0,10,0),
                             child: Text(
                               "+${chars[index].initModifier}",
                               overflow: TextOverflow.ellipsis,

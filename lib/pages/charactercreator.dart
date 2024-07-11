@@ -170,6 +170,9 @@ class _CharactercreatorState extends State<Charactercreator> {
     }
     controller.text = s.toString();
   }
+  void toggleProf(bool prof) {
+    prof = !prof;
+  }
 
   bool isNotNumeric(String value) {
     // ignore: unnecessary_null_comparison
@@ -213,6 +216,7 @@ class _CharactercreatorState extends State<Charactercreator> {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<Updater>(builder: (context, value, child) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -225,7 +229,7 @@ class _CharactercreatorState extends State<Charactercreator> {
                   Flexible(
                     flex: 3,
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                       height: 60,
                       decoration: BoxDecoration(
                         color: widget.good ? AppProperties.heroPurple : AppProperties.enemyRed,
@@ -234,7 +238,7 @@ class _CharactercreatorState extends State<Charactercreator> {
                       child: Row(
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                             child: widget.good ? 
                           const Icon(
                             FontAwesomeIcons.shield,
@@ -282,6 +286,7 @@ class _CharactercreatorState extends State<Charactercreator> {
                                 widget.newChar,
                                 widget.good
                               );  
+                            saveToBox(hiveBox);
                             });  
                           },
                         ),
@@ -290,47 +295,12 @@ class _CharactercreatorState extends State<Charactercreator> {
                 ],
               ),
             ),
-            GestureDetector(
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppProperties.bRadius),
-                    color: AppProperties.cardColor2),
-                height: 100,
-                width: double.infinity,
-                margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                      child: Text("Name"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                      child: nameEditing
-                          ? TextField(
-                              controller: nameController,
-                              autofocus: true,
-                              onSubmitted: (value) {
-                                if (nameController.text.isEmpty) {
-                                  nameController.text = "-";
-                                }
-                                setState(() {
-                                  nameEditing = false;
-                                });
-                              },
-                            )
-                          : Text(nameController.text),
-                    )
-                  ],
-                ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+              child: TextInputChar(
+                controller: nameController,
+                desc: "NAME",
               ),
-              onTap: () {
-                setState(() {
-                  nameEditing = true;
-                });
-              },
             ),
             Container(
               decoration: BoxDecoration(
@@ -338,91 +308,34 @@ class _CharactercreatorState extends State<Charactercreator> {
                   color: AppProperties.cardColor2),
               height: 100,
               width: double.infinity,
+              alignment: Alignment.centerLeft,
               margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                            child: Text("Race"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                            child: raceEditing
-                                ? TextField(
-                                    controller: raceController,
-                                    autofocus: true,
-                                    onSubmitted: (value) {
-                                      if (raceController.text.isEmpty) {
-                                        raceController.text = "-";
-                                      }
-                                      setState(() {
-                                        raceEditing = false;
-                                      });
-                                    },
-                                  )
-                                : Text(raceController.text),
-                          )
-                        ],
-                      ),
-                      onTap: () {
-                        setState(() {
-                          raceEditing = true;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: SizedBox(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                              child: Text("Class"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                              child: classEditing
-                                  ? TextField(
-                                      controller: classController,
-                                      autofocus: true,
-                                      onSubmitted: (value) {
-                                        if (classController.text.isEmpty) {
-                                          classController.text = "-";
-                                        }
-                                        setState(() {
-                                          classEditing = false;
-                                        });
-                                      },
-                                    )
-                                  : Text(classController.text),
-                            )
-                          ],
+                child: Row(
+                  children: [
+                  Flexible(
+                    flex: 1,
+                    child: TextInputChar(
+                          controller: raceController,
+                          desc: "RACE",
                         ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          classEditing = true;
-                        });
-                      },
-                    ),
                   ),
-                ],
+
+                  Flexible(
+  flex: 1,
+  child: TextInputChar(
+                          controller: classController,
+                          desc: "CLASS"
+                        ),
+),
+
+                  ],
+                ),
               ),
-            ),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppProperties.bRadius),
                   color: AppProperties.cardColor2),
-              height: 185,
+              height: 260,
               width: double.infinity,
               margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
               child: Column(
@@ -433,88 +346,28 @@ class _CharactercreatorState extends State<Charactercreator> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Strength",
-                                      style: TextStyle(
-                                          color: strProf
-                                              ? Colors.blue
-                                              : Colors.white)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: strProf
-                                      ? Text(
-                                          "${strController.text}     + ${toProf(int.parse(strController.text)) + returnProf(int.parse(levelController.text))}",
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        )
-                                      : Text(
-                                          "${strController.text}     + ${toProf(int.parse(strController.text))}"),
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                updateValue(strController, "stat");
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                strProf = !strProf;
-                              });
-                            },
-                          ),
+                          child: TapInputChar(
+                            controller: strController,
+                            desc: "STRENGTH",
+                            prof: strProf,
+                            returnProf: returnProf,
+                            levelController: levelController,
+                            toProf: toProf,
+                            toggleProf: toggleProf,
+                            updateValue: updateValue,
+                          )
                         ),
                         Expanded(
-                          child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Dexterity",
-                                      style: TextStyle(
-                                          color: dexProf
-                                              ? Colors.blue
-                                              : Colors.white)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: dexProf
-                                      ? Text(
-                                          "${dexController.text}     + ${toProf(int.parse(dexController.text)) + returnProf(int.parse(levelController.text))}",
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        )
-                                      : Text(
-                                          "${dexController.text}     + ${toProf(int.parse(dexController.text))}"),
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                updateValue(dexController, "stat");
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                dexProf = !dexProf;
-                              });
-                            },
-                          ),
+                          child: TapInputChar(
+                            controller: dexController,
+                            desc: "DEXTERITY",
+                            prof: dexProf,
+                            returnProf: returnProf,
+                            levelController: levelController,
+                            toProf: toProf,
+                            toggleProf: toggleProf,
+                            updateValue: updateValue,
+                          )
                         ),
                       ],
                     ),
@@ -524,88 +377,28 @@ class _CharactercreatorState extends State<Charactercreator> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Constitution",
-                                      style: TextStyle(
-                                          color: conProf
-                                              ? Colors.blue
-                                              : Colors.white)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: conProf
-                                      ? Text(
-                                          "${conController.text}     + ${toProf(int.parse(conController.text)) + returnProf(int.parse(levelController.text))}",
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        )
-                                      : Text(
-                                          "${conController.text}     + ${toProf(int.parse(conController.text))}"),
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                updateValue(conController, "stat");
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                conProf = !conProf;
-                              });
-                            },
-                          ),
+                          child: TapInputChar(
+                            controller: intController,
+                            desc: "INTELIGENCE",
+                            prof: intProf,
+                            returnProf: returnProf,
+                            levelController: levelController,
+                            toProf: toProf,
+                            toggleProf: toggleProf,
+                            updateValue: updateValue,
+                          )
                         ),
                         Expanded(
-                          child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Intelligence",
-                                      style: TextStyle(
-                                          color: intProf
-                                              ? Colors.blue
-                                              : Colors.white)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: intProf
-                                      ? Text(
-                                          "${intController.text}     + ${toProf(int.parse(intController.text)) + returnProf(int.parse(levelController.text))}",
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        )
-                                      : Text(
-                                          "${intController.text}     + ${toProf(int.parse(intController.text))}"),
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                updateValue(intController, "stat");
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                intProf = !intProf;
-                              });
-                            },
-                          ),
+                          child: TapInputChar(
+                            controller: conController,
+                            desc: "CONSTITUTION",
+                            prof: conProf,
+                            returnProf: returnProf,
+                            levelController: levelController,
+                            toProf: toProf,
+                            toggleProf: toggleProf,
+                            updateValue: updateValue,
+                          )
                         ),
                       ],
                     ),
@@ -615,88 +408,28 @@ class _CharactercreatorState extends State<Charactercreator> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Wisdom",
-                                      style: TextStyle(
-                                          color: wisProf
-                                              ? Colors.blue
-                                              : Colors.white)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: wisProf
-                                      ? Text(
-                                          "${wisController.text}     + ${toProf(int.parse(wisController.text)) + returnProf(int.parse(levelController.text))}",
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        )
-                                      : Text(
-                                          "${wisController.text}     + ${toProf(int.parse(wisController.text))}"),
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                updateValue(wisController, "stat");
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                wisProf = !wisProf;
-                              });
-                            },
-                          ),
+                          child: TapInputChar(
+                            controller: wisController,
+                            desc: "WISDOM",
+                            prof: wisProf,
+                            returnProf: returnProf,
+                            levelController: levelController,
+                            toProf: toProf,
+                            toggleProf: toggleProf,
+                            updateValue: updateValue,
+                          )
                         ),
                         Expanded(
-                          child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Charisma",
-                                      style: TextStyle(
-                                          color: chaProf
-                                              ? Colors.blue
-                                              : Colors.white)),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: chaProf
-                                      ? Text(
-                                          "${chaController.text}     + ${toProf(int.parse(chaController.text)) + returnProf(int.parse(levelController.text))}",
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                          ),
-                                        )
-                                      : Text(
-                                          "${chaController.text}     + ${toProf(int.parse(chaController.text))}"),
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                updateValue(chaController, "stat");
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                chaProf = !chaProf;
-                              });
-                            },
-                          ),
+                          child: TapInputChar(
+                            controller: chaController,
+                            desc: "CHARISMA",
+                            prof: chaProf,
+                            returnProf: returnProf,
+                            levelController: levelController,
+                            toProf: toProf,
+                            toggleProf: toggleProf,
+                            updateValue: updateValue,
+                          )
                         ),
                       ],
                     ),
@@ -731,12 +464,26 @@ class _CharactercreatorState extends State<Charactercreator> {
                                 children: [
                                   const Padding(
                                     padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                    child: Text("Armorclass"),
+                                    child: Text(
+                                      "ARMORCLASS",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
                                   ),
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                    child: Text(armorController.text),
+                                    child: Text(
+                                      armorController.text,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20
+                                      ),
+                                    ),
                                   )
                                 ],
                               ),
@@ -755,14 +502,22 @@ class _CharactercreatorState extends State<Charactercreator> {
                             children: [
                               const Padding(
                                 padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                child: Text("Initiative"),
+                                child: Text("INITIATIVE",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20
+                                ),
                               ),
+                            ),
                               Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 0, 0, 10),
                                 child: Text(getInitiative(
-                                        toProf(int.parse(dexController.text)))
-                                    .toString()),
+                                        toProf(int.parse(dexController.text))).toString(),
+                                        style:const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20
+                                ),),
                               )
                             ],
                           ),
@@ -776,20 +531,39 @@ class _CharactercreatorState extends State<Charactercreator> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Level"),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: Text(levelController.text),
-                                )
-                              ],
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: AppProperties.cardColor2
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                    child: Text(
+                                      "LEVEL",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                                    child: Text(
+                                      levelController.text,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             onTap: () {
                               setState(() {
@@ -807,7 +581,11 @@ class _CharactercreatorState extends State<Charactercreator> {
                                 padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                                 child: Text(
                                   "Proficieny",
-                                  style: TextStyle(color: Colors.blue),
+                                  style: TextStyle(
+                                  color: AppProperties.allyYellow,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20
+                                ),
                                 ),
                               ),
                               Padding(
@@ -816,8 +594,10 @@ class _CharactercreatorState extends State<Charactercreator> {
                                 child: Text(
                                   "+ ${returnProf(int.parse(levelController.text))}",
                                   style: const TextStyle(
-                                    color: Colors.blue,
-                                  ),
+                                    color: AppProperties.allyYellow,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20
+                                ),
                                 ),
                               )
                             ],
@@ -832,20 +612,35 @@ class _CharactercreatorState extends State<Charactercreator> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Walking Speed"),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: Text(msController.text),
-                                )
-                              ],
+                            child: Container(
+                              color: AppProperties.cardColor2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                                    child: Text("WALKINGSPEED",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                                    child: Text(msController.text,
+                                    style:  const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             onTap: () {
                               setState(() {
@@ -855,43 +650,10 @@ class _CharactercreatorState extends State<Charactercreator> {
                           ),
                         ),
                         Expanded(
-                          child: GestureDetector(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text("Health Points"),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                                  child: hpEditing
-                                      ? TextField(
-                                          controller: hpController,
-                                          autofocus: true,
-                                          keyboardType: TextInputType.number,
-                                          onSubmitted: (value) {
-                                            setState(() {
-                                              if (value.isEmpty ||
-                                                  isNotNumeric(value)) {
-                                                hpController.text = "-";
-                                              } else {
-                                                hpController.text = value;
-                                              }
-                                              hpEditing = false;
-                                            });
-                                          },
-                                        )
-                                      : Text(hpController.text),
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              hpEditing = true;
-                            },
-                          ),
+                          child: TextInputChar(
+              controller: hpController,
+              desc: "Health Points",
+            ),
                         ),
                       ],
                     ),
@@ -902,7 +664,7 @@ class _CharactercreatorState extends State<Charactercreator> {
           ],
         ),
       ),
-    );
+    );});
   }
 }
 
@@ -952,6 +714,178 @@ class _CharacterCreatorTopBarState extends State<CharacterCreatorTopBar> {
           ),
         ],
       ),
+    );
+  }
+}
+
+
+class TextInputChar extends StatefulWidget {
+  const TextInputChar({
+    super.key,
+    required this.controller,
+    required this.desc
+  });
+  final String desc;
+  final TextEditingController controller;
+  @override
+  State<TextInputChar> createState() => _TextInputCharState();
+}
+
+class _TextInputCharState extends State<TextInputChar> {
+  bool editing = false;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+              child: Container(
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(AppProperties.bRadius),
+                    color: AppProperties.cardColor2),
+                height: 100,
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      child: Text(
+                        widget.desc,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                      child: editing
+                          ? TextField(
+                              controller: widget.controller,
+                              autofocus: true,
+                              onSubmitted: (value) {
+                                if (widget.controller.text.isEmpty) {
+                                  widget.controller.text = "-";
+                                }
+                                setState(() {
+                                  editing = false;
+                                });
+                              },
+                            )
+                          : Text(
+                            widget.controller.text,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20
+                            ),
+                          ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  editing = true;
+                });
+              },
+            );
+  }
+}
+
+class TapInputChar extends StatefulWidget {
+  const TapInputChar({
+    super.key,
+    required this.prof,
+    required this.controller,
+    required this.levelController,
+    required this.toProf,
+    required this.returnProf,
+    required this.updateValue,
+    required this.toggleProf,
+    required this.desc,
+  });
+
+  final bool prof;
+  final TextEditingController controller;
+  final TextEditingController levelController;
+  final Function(int) toProf;
+  final Function returnProf;
+  final Function updateValue;
+  final Function(bool) toggleProf;
+  final String desc;
+
+  @override
+  State<TapInputChar> createState() => _TapInputCharState();
+}
+
+class _TapInputCharState extends State<TapInputChar> {
+  late bool _isProf;
+
+  @override
+  void initState() {
+    super.initState();
+    _isProf = widget.prof;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppProperties.cardColor2,
+          borderRadius: BorderRadius.circular(AppProperties.bRadius)
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+              child: Text(
+                widget.desc,
+                style: TextStyle(
+                  color: _isProf ? AppProperties.allyYellow : Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+              child: _isProf
+                  ? Text(
+                      "${widget.controller.text}     + ${widget.toProf(int.parse(widget.controller.text)) + widget.returnProf(int.parse(widget.levelController.text))}",
+                      style: const TextStyle(
+                        color: AppProperties.allyYellow,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600
+                      ),
+                    )
+                  : Text(
+                      "${widget.controller.text}     + ${widget.toProf(int.parse(widget.controller.text))}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          widget.updateValue(widget.controller, "stat");
+          Provider.of<Updater>(context, listen: false).refresh();
+        });
+      },
+      onLongPress: () {
+        setState(() {
+          _isProf = !_isProf;
+          widget.toggleProf(_isProf);
+          Provider.of<Updater>(context, listen: false).refresh();
+        });
+      },
     );
   }
 }

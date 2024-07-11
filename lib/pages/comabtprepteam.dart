@@ -4,7 +4,6 @@ import 'package:dmhelper/models/updater.dart';
 import 'package:dmhelper/pages/combatprepenemies.dart';
 import 'package:flutter/material.dart';
 import 'package:dmhelper/models/mockup.dart';
-import 'package:dmhelper/pages/charactercreator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -124,9 +123,9 @@ class _CombatHeroesViewTopBar extends State<CombatHeroesViewTopBar> {
                     onTap: () {
                       HelperFunctions.cancelCombat(context, 1);
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 10, 15, 10),
-                      child: Container(
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(5, 10, 15, 10),
+                      child: SizedBox(
                         width: 40,
                         height: 40,
                         child: Icon(FontAwesomeIcons.x,
@@ -180,7 +179,6 @@ class _CombatViewAddHero extends State<CombatViewAddHero> {
     }
     return count;
   }
-  int count = getAllParticipatingTeam();
     return Consumer<Updater>(builder: (context, value, child) {
     return Container(
       margin: const EdgeInsets.fromLTRB(17.5, 20, 20, 0),

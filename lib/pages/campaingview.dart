@@ -110,32 +110,30 @@ class _CampaingTopBar extends State<CampaingTopBar> {
       margin: const EdgeInsets.fromLTRB(15, 40, 15, 0),
       child: Column(
         children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    exit();
-                  },
-                  child: Container(
-                    width: 50,
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
-                      child: Icon(Icons.arrow_back, color: AppProperties.cardColor3, size: 30),
-                    ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  exit();
+                },
+                child: const SizedBox(
+                  width: 50,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
+                    child: Icon(Icons.arrow_back, color: AppProperties.cardColor3, size: 30),
                   ),
                 ),
-                const Text(
-                  "MY CAMPAIGNS",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: AppProperties.cardColor3,
-                    fontWeight: FontWeight.w600,
-                  ),
+              ),
+              const Text(
+                "MY CAMPAIGNS",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: AppProperties.cardColor3,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Container(
             padding: const EdgeInsets.fromLTRB(50, 0, 0, 20),
@@ -185,7 +183,7 @@ class _CampaingAddHeroState extends State<CampaingAddHero> {
         child: Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
             alignment: Alignment.centerLeft,
             height: 50,
             width: AppProperties.screenWidth(context) > 450 ? 400 : double.infinity,
