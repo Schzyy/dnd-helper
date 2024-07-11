@@ -276,18 +276,17 @@ class HeroCard extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20))),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(10, 22, 10, 0),
-                    child: Icon(
-                      FontAwesomeIcons.shieldHalved,
+                    padding: const EdgeInsets.fromLTRB(10, 22, 10, 0),
+                    child: SvgPicture.asset(
+                      'lib/assets/heroIcon.svg',
                       color: AppProperties.herpPurpleDark,
-                      size: 25,
-                    ),
+                    )
                   ),
-                  Padding(
+                 const Padding(
                     padding: EdgeInsets.fromLTRB(0,0,0,10),
                     child: RotatedBox(
                       quarterTurns: 135,

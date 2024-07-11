@@ -127,10 +127,10 @@ class TemplateCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 22, 10, 0),
                     child: SvgPicture.asset(
-                      'lib/assets/npcIcon.svg',
+                      'lib/assets/enemyIcon.svg',
                       color: AppProperties.enemyRedDark,
-                      width: 20,
-                      height: 20,
+                      width: 24,
+                      height: 24,
                     ),
                   ),
                   const Padding(
@@ -178,7 +178,7 @@ class TemplateCard extends StatelessWidget {
                                 size: 30,
                                 color: Colors.white,
                               ),
-                              onTap: () {
+                              onLongPress: () {
                                 chars.removeAt(index);
                                 Provider.of<Updater>(context, listen: false).refresh();
                               }),

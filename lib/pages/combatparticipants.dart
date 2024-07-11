@@ -78,6 +78,9 @@ class _ParticipantCardState extends State<ParticipantViewCard> {
                 Row(
                   children: [
                     Container(
+                      constraints: BoxConstraints(
+                        maxWidth: AppProperties.screenWidth(context)*0.9
+                      ),
                       height: 80,
                       width: 50,
                       decoration: BoxDecoration(
@@ -91,7 +94,7 @@ class _ParticipantCardState extends State<ParticipantViewCard> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: SvgPicture.asset(
-                          combat.partake[widget.index].good ? 'lib/assets/combatIcon.svg' : 'lib/assets/npcIcon.svg',
+                          combat.partake[widget.index].good ? 'lib/assets/heroIcon.svg' : 'lib/assets/enemyIcon.svg',
                           color: combat.partake[widget.index].dead ? outColor : inColor, 
                           width: 30,
                           height: 30,
@@ -101,7 +104,11 @@ class _ParticipantCardState extends State<ParticipantViewCard> {
                     Padding(
                         padding: const EdgeInsets.fromLTRB(10,0,0,0),
                         child: Text(
-                          combat.partake[widget.index].name
+                          combat.partake[widget.index].name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600
+                          ),
                         ),
                       ),
                   ],

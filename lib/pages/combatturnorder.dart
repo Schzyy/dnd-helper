@@ -234,6 +234,9 @@ class _ParticipantsCardState extends State<ParticipantsCard> {
         });
       },
       child: Container(
+        constraints: BoxConstraints(
+          maxWidth: AppProperties.screenWidth(context)*0.9,
+        ),
         width: double.infinity,
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         height: 80,
@@ -263,19 +266,26 @@ class _ParticipantsCardState extends State<ParticipantsCard> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: SvgPicture.asset(
-                        combat.partake[widget.index].good ? 'lib/assets/combatIcon.svg' : 'lib/assets/npcIcon.svg',
+                        combat.partake[widget.index].good ? 'lib/assets/heroIcon.svg' : 'lib/assets/enemyIcon.svg',
                         color: inUse ? outColor : inColor, 
                         width: 30,
                         height: 30,
                       ),
                     ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                      child: Text(
-                        combat.partake[widget.index].name
+                  FittedBox(
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                        child: Text(
+                          combat.partake[widget.index].name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 23,
+                            overflow: TextOverflow.ellipsis
+                          ),
+                        ),
                       ),
-                    ),
+                  ),
                 ],
               ),
               Row(

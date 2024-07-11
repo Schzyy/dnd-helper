@@ -14,6 +14,7 @@ class CampaignStart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.black,
         fontFamily: 'Space',
@@ -70,6 +71,7 @@ class _HomeState extends State<Home> with WidgetsBindingObserver {
 
     if (state == AppLifecycleState.paused) {
     } else if (state == AppLifecycleState.detached) {
+      saveToBox(hiveBox);
       hiveBox.close();
     }
   }
@@ -337,10 +339,10 @@ class CampaignOverviewCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
                     child: Text(
-                      "Campaign",
+                      "campaign",
                       style: TextStyle(
                         color: rotatingColorFont[0],
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -358,6 +360,7 @@ class CampaignOverviewCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 20,
+                      fontWeight: FontWeight.w600
                     ),
                   ),
                 ),
@@ -383,8 +386,8 @@ class CampaignOverviewCard extends StatelessWidget {
                               },
                               child: Container(
                                 constraints: const BoxConstraints(
-                                  maxHeight: 200, // Adjusted to a smaller size
-                                  maxWidth: 300, // Adjusted to a smaller size
+                                  maxHeight: 200, 
+                                  maxWidth: 300,
                                 ),
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(

@@ -126,7 +126,7 @@ class _CharactercreatorState extends State<Charactercreator> {
   i = i - 10;
   double iTwo = i.toDouble();
   iTwo = iTwo / 2;
-  i = iTwo.floor(); // Use floor to get the correct integer part
+  i = iTwo.floor();
   return i;
 }
 

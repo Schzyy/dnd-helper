@@ -300,7 +300,9 @@ class CombatEnemyCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10,0,10,0),
                       child: SvgPicture.asset(
-                        'lib/assets/npcIcon.svg',
+                        'lib/assets/enemyIcon.svg',
+                        width: 24,
+                        height: 24,
                         color: AppProperties.enemyRedDark,
                       )
                     ),
@@ -323,7 +325,8 @@ class CombatEnemyCard extends StatelessWidget {
                               chars[indexCharacter].name,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 20
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600
                               ),
                             ),
                           ),
@@ -348,7 +351,8 @@ class CombatEnemyCard extends StatelessWidget {
                           flex: 1,
                           child: Text(chars[indexCharacter].amount.toString(),
                           style: const TextStyle(
-                            fontWeight: FontWeight.w600
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20
                           ),
                           )
                         ),
@@ -378,7 +382,8 @@ class CombatEnemyCard extends StatelessWidget {
                             chars[indexCharacter].race,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 10,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600
                             ),
                             ),
 
@@ -388,7 +393,8 @@ class CombatEnemyCard extends StatelessWidget {
                               chars[indexCharacter].characterclass,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 10,
+                                fontSize: 17,
+                              fontWeight: FontWeight.w600
                               ),
                               ),
                             ),

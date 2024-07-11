@@ -232,38 +232,60 @@ class _CurrentParticipantCardState extends State<CurrentParticipantCard> {
         margin: widget.displayChar.good ? const EdgeInsets.fromLTRB(30, 10, 10, 0) : const EdgeInsets.fromLTRB(10, 10, 30, 0),
         width: double.infinity,
         height: AppProperties.screenHeight(context) * 0.35,
-        child: Card(
+        decoration: BoxDecoration(
           color: AppProperties.cardColor2,
-          child: Row(
+          borderRadius: widget.displayChar.good ?
+          BorderRadius.only(
+            bottomLeft: Radius.circular(AppProperties.bRadius),
+            topLeft: Radius.circular(AppProperties.bRadius),
+            topRight: const Radius.circular(0),
+            bottomRight: const Radius.circular(0),
+          ) :
+          BorderRadius.only(
+            bottomLeft: const Radius.circular(0),
+            topLeft: const Radius.circular(0),
+            topRight: Radius.circular(AppProperties.bRadius),
+            bottomRight: Radius.circular(AppProperties.bRadius),
+          )
+        ),
+        child: Row(
             children: [
               Container(
                 decoration: BoxDecoration(
                   color: widget.displayChar.good
                       ? AppProperties.heroPurple
                       : AppProperties.enemyRed,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  ),
+                  borderRadius: widget.displayChar.good ?
+          BorderRadius.only(
+            bottomLeft: Radius.circular(AppProperties.bRadius),
+            topLeft: Radius.circular(AppProperties.bRadius),
+            topRight: const Radius.circular(0),
+            bottomRight: const Radius.circular(0),
+          ) :
+          const BorderRadius.only(
+            bottomLeft: Radius.circular(0),
+            topLeft: Radius.circular(0),
+            topRight: Radius.circular(0),
+            bottomRight: Radius.circular(0),
+          )
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: widget.displayChar.good ? const Icon(
-                        FontAwesomeIcons.shield,
+                      child: widget.displayChar.good ? SvgPicture.asset(
+                        'lib/assets/heroIcon.svg',
                         color: AppProperties.herpPurpleDark,
-                        size: 30,
-                      ) : SvgPicture.asset(
-                        'lib/assets/npcIcon.svg',
+                      )  : SvgPicture.asset(
+                        'lib/assets/enemyIcon.svg',
                         color: AppProperties.enemyRedDark,
                       )
                     ),
                     RotatedBox(
                       quarterTurns: 135,
                       child: Text(
-                        widget.displayChar.good ? "HERO" : "ENEMY",
+                        widget.displayChar.good ? "hero" : "enemy",
                         style: TextStyle(
                           fontSize: 20,
                           color: widget.displayChar.good ? AppProperties.herpPurpleDark : AppProperties.enemyRedDark,
@@ -371,7 +393,6 @@ class _CurrentParticipantCardState extends State<CurrentParticipantCard> {
             ],
           ),
         ),
-      ),
     );
   }
 }
@@ -389,34 +410,56 @@ class _ParticipantCardState extends State<ParticipantCard> {
     return Opacity(
       opacity: widget.displayChar.dead ? 0.4 : 1.0,
       child: Container(
-        margin: widget.displayChar.good ? const EdgeInsets.fromLTRB(90, 10, 10, 10) : const EdgeInsets.fromLTRB(10, 10, 90, 5),
+        margin: widget.displayChar.good ? const EdgeInsets.fromLTRB(80, 10, 10, 10) : const EdgeInsets.fromLTRB(10, 10, 80, 5),
         width: double.infinity,
-        height: 90,
-        child: Card(
+        decoration: BoxDecoration(
           color: AppProperties.cardColor2,
-          child: Row(
+          borderRadius: widget.displayChar.good ?
+          BorderRadius.only(
+            bottomLeft: Radius.circular(AppProperties.bRadius),
+            topLeft: Radius.circular(AppProperties.bRadius),
+            topRight: const Radius.circular(0),
+            bottomRight: const Radius.circular(0),
+          ) :
+          BorderRadius.only(
+            bottomLeft: const Radius.circular(0),
+            topLeft: const Radius.circular(0),
+            topRight: Radius.circular(AppProperties.bRadius),
+            bottomRight: Radius.circular(AppProperties.bRadius),
+          )
+        ),
+        height: 90,
+        child: Row(
             children: [
               Container(
                 decoration: BoxDecoration(
                   color: widget.displayChar.good
                       ? AppProperties.heroPurple
                       : AppProperties.enemyRed,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  ),
+                borderRadius: widget.displayChar.good ?
+          BorderRadius.only(
+            bottomLeft: Radius.circular(AppProperties.bRadius),
+            topLeft: Radius.circular(AppProperties.bRadius),
+            topRight: const Radius.circular(0),
+            bottomRight: const Radius.circular(0),
+          ) :
+          const BorderRadius.only(
+            bottomLeft: Radius.circular(0),
+            topLeft: Radius.circular(0),
+            topRight: Radius.circular(0),
+            bottomRight: Radius.circular(0),
+          ) 
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: widget.displayChar.good ? const Icon(
-                        FontAwesomeIcons.shield,
+                      child: widget.displayChar.good ? SvgPicture.asset(
+                        'lib/assets/heroIcon.svg',
                         color: AppProperties.herpPurpleDark,
-                        size: 28,
                       ) : SvgPicture.asset(
-                        'lib/assets/npcIcon.svg',
+                        'lib/assets/enemyIcon.svg',
                         color: AppProperties.enemyRedDark,
                       ),
                     ),
@@ -507,7 +550,6 @@ class _ParticipantCardState extends State<ParticipantCard> {
             ],
           ),
         ),
-      ),
     );
   }
 }
